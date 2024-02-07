@@ -7,6 +7,7 @@ import (
 	"go.mod/db"
 	"go.mod/entity"
 	"go.mod/middleware"
+	"go.mod/rest"
 )
 
 type UserManager struct {
@@ -16,12 +17,15 @@ func NewUserManager() *UserManager {
 	return &UserManager{}
 }
 
-func (*UserManager) User(ctx context.Context) (*entity.User, error) {
+func (um *UserManager) User(ctx context.Context) (*entity.User, error) {
 	fmt.Println("teste mateus henrique")
 	return nil, nil
 }
-func (*UserManager) CreateUser(ctx context.Context, user entity.User) error {
-
+func (um *UserManager) CreateUser(ctx context.Context, user entity.User) error {
+	err := db.Create(ctx, user)
+	if err != nil {
+		return rest.LogError(err, "um.CreateUser db.Create")
+	}
 	return nil
 }
 
