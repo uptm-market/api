@@ -14,7 +14,7 @@ services:
     ports:
       - "5451:5432"
     volumes:
-      - ./src/postgres:/docker-entrypoint-initdb.d
+      - ./postgres:/docker-entrypoint-initdb.d
 
   go-app:
     build:
