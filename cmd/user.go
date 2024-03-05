@@ -11,7 +11,7 @@ import (
 
 func UserRouter() http.Handler {
 	r := chi.NewRouter()
-	r.Get("/", userinfoHandler)
+	r.Get("/{id}", userinfoHandler)
 	r.Post("/", crateUserHandler)
 	r.Post("/login", loginHandler)
 	return r
