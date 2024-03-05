@@ -77,3 +77,53 @@ func VerifyCredentials(ctx context.Context, email, password string) (*entity.Use
 
 	return user, nil
 }
+
+func ReturnUserById(ctx context.Context, id string) (*entity.UserInfoView, error) {
+	var array []entity.UserInfoView
+	rows, err := infradb.QueryWithContext(ctx, `
+	select 
+	email,
+	name,
+	birth_date,
+	gender,
+	cpf,
+	cell_phone,
+	zip_code,
+	state,
+	city,
+	district,
+	street,
+	street_number,
+	complement,
+	level from users where id =$1;
+	`, id)
+	if err != nil {
+		return nil, err
+	}
+
+	for rows.Next() {
+		var user *entity.UserInfoView
+		err := rows.Scan(
+			&user.Email,
+			&user.Name,
+			&user.Birthdate,
+			&user.Gender,
+			&user.CPF,
+			&user.CellPhone,
+			&user.ZipCode,
+			&user.State,
+			&user.City,
+			&user.District,
+			&user.Street,
+			&user.StreetNumber,
+			&user.Complement,
+			&user.Level,
+		)
+		if err != nil {
+			return nil, err
+		}
+		array = append(array, *user)
+	}
+
+	return &array[0], nil
+}

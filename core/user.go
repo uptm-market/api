@@ -2,7 +2,6 @@ package core
 
 import (
 	"context"
-	"fmt"
 
 	"go.mod/db"
 	"go.mod/entity"
@@ -17,9 +16,12 @@ func NewUserManager() *UserManager {
 	return &UserManager{}
 }
 
-func (um *UserManager) User(ctx context.Context) (*entity.User, error) {
-	fmt.Println("teste mateus henrique")
-	return nil, nil
+func (um *UserManager) User(ctx context.Context, id string) (*entity.UserInfoView, error) {
+	userinfo, err := db.ReturnUserById(ctx, id)
+	if err != nil {
+		return nil, rest.LogError(err)
+	}
+	return userinfo, nil
 }
 func (um *UserManager) CreateUser(ctx context.Context, user entity.User) error {
 	err := db.Create(ctx, user)
