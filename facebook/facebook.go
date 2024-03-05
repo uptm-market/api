@@ -1,0 +1,35 @@
+package fc
+
+import (
+	"context"
+	"fmt"
+
+	v16 "github.com/justwatch/facebook-marketing-api-golang-sdk/marketing/v16"
+	"go.mod/rest"
+)
+
+const (
+	appID       = "SUA_APP_ID"
+	appSecret   = "SEU_APP_SECRET"
+	accessToken = "SEU_ACCESS_TOKEN"
+	adAccountID = "ID_DA_CONTA_DE_ANUNCIOS"
+	campaignID  = "ID_DA_CAMPANHA"
+)
+
+func Init(ctx context.Context, ID string) {
+
+	fbService, err := v16.New(nil, accessToken, appSecret)
+	if err != nil {
+		rest.LogError(err, "Erro ao criar conexao com api do facebook")
+		return
+	}
+
+	id := "[account_id]"
+
+	campaigns, err := fbService.Campaigns.List(id).Do(ctx)
+	if err != nil {
+		rest.LogError(err, "Erro ao retornar dados da campanha")
+		return
+	}
+	fmt.Println(campaigns)
+}
