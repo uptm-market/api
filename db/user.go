@@ -102,7 +102,7 @@ func ReturnUserById(ctx context.Context, id string) (*entity.UserInfoView, error
 	}
 
 	for rows.Next() {
-		var user *entity.UserInfoView
+		var user entity.UserInfoView
 		err := rows.Scan(
 			&user.Email,
 			&user.Name,
@@ -122,7 +122,7 @@ func ReturnUserById(ctx context.Context, id string) (*entity.UserInfoView, error
 		if err != nil {
 			return nil, err
 		}
-		array = append(array, *user)
+		array = append(array, user)
 	}
 
 	return &array[0], nil

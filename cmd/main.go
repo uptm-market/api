@@ -43,6 +43,6 @@ func main() {
 	if port == "" {
 		port = "9999"
 	}
-
+	fmt.Println(":", port)
 	log.Fatal(http.ListenAndServe(":"+port, r))
 }
