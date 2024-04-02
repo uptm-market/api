@@ -14,3 +14,19 @@ func CreateFacebookCampaign(ctx context.Context, data entity.FacebookCampaignAdA
 	}
 	return nil
 }
+
+func ReturnCampaign(ctx context.Context, userId int) ([]entity.FacebookCampaignAdAccount, error) {
+	var array []entity.FacebookCampaignAdAccount
+	rows, err := infradb.DB.QueryContext(ctx, `SELECT id, campaign_account_id, ad_account_id, user_id FROM facebook_campaign_ad_account where user_id=$1;`, userId)
+	if err != nil {
+		return nil, err
+	}
+	var data entity.FacebookCampaignAdAccount
+	for rows.Next() {
+		rows.Scan(&data.ID, &data.CampaignAccountID, &data.AdAccountID, &data.UserID)
+		array = append(array, data)
+	}
+
+	return array, nil
+
+}

@@ -2,9 +2,9 @@ package fb
 
 import (
 	"context"
-	"fmt"
 
 	v16 "github.com/justwatch/facebook-marketing-api-golang-sdk/marketing/v16"
+	"go.mod/entity"
 	"go.mod/rest"
 )
 
@@ -16,12 +16,12 @@ const (
 	campaignID  = "ID_DA_CAMPANHA"
 )
 
-func Init(ctx context.Context, ID string) {
+func Init(ctx context.Context, ID entity.FacebookCampaignAdAccount) []v16.Campaign {
 
 	fbService, err := v16.New(nil, accessToken, appSecret)
 	if err != nil {
 		rest.LogError(err, "Erro ao criar conexao com api do facebook")
-		return
+		return nil
 	}
 
 	id := "[account_id]"
@@ -29,7 +29,7 @@ func Init(ctx context.Context, ID string) {
 	campaigns, err := fbService.Campaigns.List(id).Do(ctx)
 	if err != nil {
 		rest.LogError(err, "Erro ao retornar dados da campanha")
-		return
+		return nil
 	}
-	fmt.Println(campaigns)
+	return campaigns
 }

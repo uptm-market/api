@@ -52,5 +52,8 @@ func createCampaignHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func returnCampaignHandler(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	userId := r.URL.Query().Get("user_id")
+	manager := core.NewUserCampaign()
 
 }
