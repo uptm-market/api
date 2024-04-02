@@ -2,6 +2,7 @@ package db
 
 import (
 	"context"
+	"time"
 
 	infradb "go.mod/connect"
 	"go.mod/entity"
@@ -126,4 +127,25 @@ func ReturnUserById(ctx context.Context, id string) (*entity.UserInfoView, error
 	}
 
 	return &array[0], nil
+}
+
+type User struct {
+	ID                    int
+	EmailVerificationTime time.Time
+	CreationTime          time.Time
+}
+
+func VerificationTimeUser(ctx context.Context, userID string) (bool, error) {
+	var user User
+	err := infradb.DB.QueryRowContext(ctx, "SELECT id, email_verification_time, creation_time FROM users WHERE id = ?", userID).Scan(&user.ID, &user.EmailVerificationTime, &user.CreationTime)
+	if err != nil {
+		return false, err
+	}
+
+	// Verificar se passou 1 mês desde a criação do usuário
+	if time.Since(user.CreationTime) >= (30 * 24 * time.Hour) {
+		return true, nil
+	}
+
+	return false, nil
 }

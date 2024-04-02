@@ -40,6 +40,7 @@ func main() {
 	r.Use(corsOptions.Handler)
 	r.Mount("/user", UserRouter())
 	r.Mount("/campaign", CampaignRouter())
+
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "9999"
