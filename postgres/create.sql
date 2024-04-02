@@ -1,5 +1,5 @@
 CREATE TABLE users (
-    id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    id SERIAL PRIMARY KEY,
     email VARCHAR(255) NOT NULL UNIQUE,
     email_verification_key VARCHAR(255),
     email_verification_time TIMESTAMP,
@@ -14,12 +14,14 @@ CREATE TABLE users (
     street_number VARCHAR(20),
     complement VARCHAR(255),
     birthdate DATE,
-    gender ENUM('Male', 'Female', 'Other'),
+    gender varchar,
     cpf VARCHAR(14),
-    source TINYINT,
-    record_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    source SMALLINT,
+    record_date TIMESTAMP ,
     level INTEGER
 );
+
+
 
 CREATE TABLE user_sub_accounts (
     id INT PRIMARY KEY,
@@ -35,10 +37,8 @@ CREATE TABLE related_sub_accounts_in_master_user (
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
-
-
 CREATE TABLE facebook_campaign_ad_account (
-    id INT PRIMARY KEY AUTO_INCREMENT,
+    id INT PRIMARY KEY ,
     campaign_account_id VARCHAR(255) NOT NULL,
     ad_account_id VARCHAR(255) NOT NULL,
     user_id INT NOT NULL,
