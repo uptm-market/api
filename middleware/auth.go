@@ -9,7 +9,7 @@ import (
 )
 
 // AuthMiddlewareWithClaims é um middleware que verifica a autenticidade do token e extrai as informações.
-func AuthMiddlewareWithClaims(next http.Handler) http.Handler {
+func AuthMiddlewareWithClaims(next http.Handler) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Obtenha o token do cabeçalho de autorização.
 		authToken := r.Header.Get("Authorization")

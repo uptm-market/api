@@ -34,3 +34,14 @@ CREATE TABLE related_sub_accounts_in_master_user (
     FOREIGN KEY (sub_account_id) REFERENCES user_sub_accounts(id),
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
+
+
+
+CREATE TABLE facebook_campaign_ad_account (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    campaign_account_id VARCHAR(255) NOT NULL,
+    ad_account_id VARCHAR(255) NOT NULL,
+    user_id INT NOT NULL,
+    UNIQUE(campaign_account_id, ad_account_id),
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
