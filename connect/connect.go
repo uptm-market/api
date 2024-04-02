@@ -102,7 +102,7 @@ func LoadConfig() {
 }
 
 // Load inicializa a conexão com o banco de dados.
-func Load() error {
+func Load() *sql.DB {
 	LoadConfig()
 
 	dbMu.Lock()
@@ -110,15 +110,15 @@ func Load() error {
 
 	if DB == nil {
 		var err error
-		DB, err = newDB(DSN)
+		DB, err = newDB("postgresql://user:password@postgres:5451/database")
 		if err != nil {
 			log.Fatalf("get db: falha ao iniciar a conexão com o banco de dados: %v", err)
-			return err
+			return nil
 		}
 	}
 
 	fmt.Println("Conexão com o banco de dados estabelecida com sucesso.")
-	return nil
+	return DB
 }
 
 // Close fecha a conexão com o banco de dados.

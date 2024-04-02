@@ -33,7 +33,7 @@ func Create(ctx context.Context, user entity.User) error {
             $1, 'verification', NOW(), $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14
         )`
 
-	_, err := infradb.DB.QueryContext(ctx, query,
+	_, err := infradb.Load().QueryContext(ctx, query,
 		user.Email,
 		user.Password,
 		user.Name,
@@ -61,7 +61,7 @@ func VerifyCredentials(ctx context.Context, email, password string) (*entity.Use
 	}
 
 	query := "SELECT id, email, level FROM users WHERE email = $1 AND password = $2"
-	rows, err := infradb.DB.QueryContext(ctx, query, email, password)
+	rows, err := infradb.Load().QueryContext(ctx, query, email, password)
 	if err != nil {
 		return nil, err
 	}
@@ -81,7 +81,7 @@ func VerifyCredentials(ctx context.Context, email, password string) (*entity.Use
 
 func ReturnUserById(ctx context.Context, id string) (*entity.UserInfoView, error) {
 	var array []entity.UserInfoView
-	rows, err := infradb.DB.QueryContext(ctx, `
+	rows, err := infradb.Load().QueryContext(ctx, `
 	select 
 	email,
 	name,
@@ -137,7 +137,7 @@ type User struct {
 
 func VerificationTimeUser(ctx context.Context, userID string) (bool, error) {
 	var user User
-	err := infradb.DB.QueryRowContext(ctx, "SELECT id, email_verification_time, creation_time FROM users WHERE id = ?", userID).Scan(&user.ID, &user.EmailVerificationTime, &user.CreationTime)
+	err := infradb.Load().QueryRowContext(ctx, "SELECT id, email_verification_time, creation_time FROM users WHERE id = $1", userID).Scan(&user.ID, &user.EmailVerificationTime, &user.CreationTime)
 	if err != nil {
 		return false, err
 	}
