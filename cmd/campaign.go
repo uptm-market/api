@@ -55,5 +55,15 @@ func returnCampaignHandler(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	userId := r.URL.Query().Get("user_id")
 	manager := core.NewUserCampaign()
-
+	userIdInt, err := strconv.Atoi(userId)
+	if err != nil {
+		rest.SendError(w, err)
+		return
+	}
+	send, err := manager.Get(ctx, userIdInt)
+	if err != nil {
+		rest.SendError(w, err)
+		return
+	}
+	rest.Send(w, send)
 }
