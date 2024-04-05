@@ -11,27 +11,28 @@ import (
 
 func Create(ctx context.Context, user entity.User) error {
 	query := `
-        INSERT INTO users (
-            email,
-            email_verification_key,
-            email_verification_time,
-            password,
-            name,
-            birth_date,
-            gender,
-            cpf,
-            cell_phone,
-            zip_code,
-            state,
-            city,
-            district,
-            street,
-            street_number,
-            complement,
-            level
-        ) VALUES (
-            $1, 'verification', NOW(), $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14
-        )`
+	INSERT INTO users (
+		email,
+		email_verification_key,
+		email_verification_time,
+		password,
+		name,
+		birthdate,
+		gender,
+		cpf,
+		cell_phone,
+		zip_code,
+		state,
+		city,
+		district,
+		street,
+		street_number,
+		complement,
+		level
+	) VALUES (
+		$1, 'verification', NOW(), $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15
+	)
+	`
 
 	_, err := infradb.Get().QueryContext(ctx, query,
 		user.Email,
