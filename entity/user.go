@@ -10,8 +10,8 @@ import (
 type User struct {
 	ID                    uint          `json:"id,omitempty"`
 	Email                 string        `json:"email"`
-	EmailVerificationKey  string        `json:"-"`
-	EmailVerificationTime *time.Time    `json:"-"`
+	EmailVerificationKey  string        `json:"emailVerificationKey"`
+	EmailVerificationTime *time.Time    `json:"emailVerificationTime"`
 	Password              string        `json:"password"`
 	Name                  string        `json:"name"`
 	CellPhone             tel.Telephone `json:"cellPhone"`

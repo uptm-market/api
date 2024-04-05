@@ -8,13 +8,16 @@ services:
   postgres:
     image: postgres:latest
     environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: database
+      - POSTGRES_HOST=localhost
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=database
     ports:
-      - "5451:5432"
+      - "5432:5432"
     volumes:
       - ./postgres:/docker-entrypoint-initdb.d
+    networks:
+      - mynetwork  # Aqui adicionamos a rede
 
   go-app:
     build:
@@ -24,3 +27,5 @@ services:
       - postgres
     ports:
       - "3333:3333"
+    networks:
+      - mynetwork  # Também adicionamos a rede
