@@ -2,6 +2,7 @@ package core
 
 import (
 	"context"
+	"log"
 
 	"go.mod/db"
 	"go.mod/entity"
@@ -37,15 +38,16 @@ func (*UserManager) Login(ctx context.Context, email, password string) (string, 
 	// Aqui, estou usando uma função fictícia chamada VerifyCredentials como exemplo.
 	user, err := db.VerifyCredentials(ctx, email, password)
 	if err != nil {
-		return "", err
+		return "", rest.LogError(err, "um.Login db.VerifyCredentials")
 	}
+	log.Println("teste agr")
 	body := &entity.User{
 		ID:    user.ID,
 		Email: user.Email,
 	}
 	token, err := middleware.GenerateToken(body)
 	if err != nil {
-		return "", err
+		return "", rest.LogError(err, "middleware.generatetoken")
 	}
 	return token, nil
 }
