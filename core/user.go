@@ -51,3 +51,13 @@ func (*UserManager) Login(ctx context.Context, email, password string) (string, 
 	}
 	return token, nil
 }
+
+func (m *UserManager) GetMeInfo(ctx context.Context) (*entity.ReturnUserInfo, error) {
+	info, err := db.ReturnInfoMe(ctx, ctx.Value("userID").(string))
+	if err != nil {
+		log.Println("user.GetMeInfo db.ReturnInfoMe error:", err)
+		return nil, err
+	}
+	return info, nil
+
+}

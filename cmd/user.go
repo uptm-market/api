@@ -12,6 +12,7 @@ import (
 func UserRouter() http.Handler {
 	r := chi.NewRouter()
 	r.Get("/{id}", userinfoHandler)
+	r.Get("/me", userinfoMeHandler)
 	r.Post("/", crateUserHandler)
 	r.Post("/login", loginHandler)
 	return r
@@ -55,4 +56,16 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rest.Send(w, "token-basic: "+token)
+}
+
+func userinfoMeHandler(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	manager := core.NewUserManager()
+	data, err := manager.GetMeInfo(ctx)
+	if err != nil {
+		rest.SendError(w, err)
+		return
+	}
+	rest.Send(w, data)
+
 }
