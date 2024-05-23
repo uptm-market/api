@@ -1,4 +1,11 @@
 # api
+
+
+## Instalar
+
+- GOLANG
+- DOCKER
+
 ## só de rodar a api já sobe o banco de dados
 ```bash
 sudo docker-compose up --build
