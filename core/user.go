@@ -26,7 +26,16 @@ func (um *UserManager) User(ctx context.Context, id string) (*entity.UserInfoVie
 	return userinfo, nil
 }
 func (um *UserManager) CreateUser(ctx context.Context, user entity.User) error {
-	err := db.Create(ctx, user)
+
+	verify, err := db.VerifyUserExists(ctx, user.Email)
+	if err != nil {
+		return rest.LogError(err)
+	}
+	if verify {
+		return &rest.Error{Status: 400, Message: "Esse e-mail já esta em uso na plataforma", Code: "aleready_exists"}
+	}
+
+	err = db.Create(ctx, user)
 	if err != nil {
 		return rest.LogError(err, "um.CreateUser db.Create")
 	}

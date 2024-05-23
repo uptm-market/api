@@ -159,3 +159,15 @@ func ReturnInfoMe(ctx context.Context, Id string) (*entity.ReturnUserInfo, error
 	}
 	return &data, nil
 }
+
+func VerifyUserExists(ctx context.Context, email string) (bool, error) {
+	var exists bool
+	query := `SELECT EXISTS(SELECT 1 FROM users WHERE email = $1)`
+
+	err := infradb.Get().QueryRowContext(ctx, query, email).Scan(&exists)
+	if err != nil {
+		return false, err
+	}
+
+	return exists, nil
+}
