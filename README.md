@@ -62,7 +62,7 @@ sudo docker-compose up --build
     /user/me
 
 ```
-#### BODY
+#### Response
 
 ```JSON
 {
