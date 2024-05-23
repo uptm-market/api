@@ -5,7 +5,7 @@ CREATE TABLE users (
     email_verification_time TIMESTAMP,
     password VARCHAR(255) NOT NULL,
     name VARCHAR(255) NOT NULL,
-    cell_phone VARCHAR(20) NOT NULL,
+    cell_phone VARCHAR(20) ,
     city VARCHAR(255),
     state VARCHAR(255),
     zip_code VARCHAR(20),
