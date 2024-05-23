@@ -24,7 +24,7 @@ func Create(ctx context.Context, user entity.UserCreations) error {
 	_, err := infradb.Get().QueryContext(ctx, query,
 		user.Email,
 		user.Password,
-		user.Email,
+		user.Name,
 		1,
 	)
 

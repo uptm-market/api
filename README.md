@@ -31,6 +31,7 @@ sudo docker-compose up --build
 {
   "email": "example@example.com",
   "password": "password123",
+  "name": "John Doe",
 }
 
 ```
