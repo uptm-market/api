@@ -30,6 +30,10 @@ type User struct {
 	Level                 uint8         `json:"-"`
 }
 
+type UserCreations struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
 type UserInfoView struct {
 	ID           uint          `json:"id,omitempty"`
 	Email        string        `json:"email"`

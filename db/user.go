@@ -9,25 +9,12 @@ import (
 	"go.mod/rest"
 )
 
-func Create(ctx context.Context, user entity.User) error {
+func Create(ctx context.Context, user entity.UserCreations) error {
 	query := `
 	INSERT INTO users (
 		email,
-		email_verification_key,
-		email_verification_time,
 		password,
 		name,
-		birthdate,
-		gender,
-		cpf,
-		cell_phone,
-		zip_code,
-		state,
-		city,
-		district,
-		street,
-		street_number,
-		complement,
 		level
 	) VALUES (
 		$1, 'verification', NOW(), $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15
@@ -37,19 +24,8 @@ func Create(ctx context.Context, user entity.User) error {
 	_, err := infradb.Get().QueryContext(ctx, query,
 		user.Email,
 		user.Password,
-		user.Name,
-		user.Birthdate,
-		user.Gender,
-		user.CPF.String(), // Assuming CPF is a custom type with a String method
-		user.CellPhone,
-		user.ZipCode,
-		user.State,
-		user.City,
-		user.District,
-		user.Street,
-		user.StreetNumber,
-		user.Complement,
-		user.Level,
+		user.Email,
+		1,
 	)
 
 	return err

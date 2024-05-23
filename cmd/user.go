@@ -21,7 +21,7 @@ func UserRouter() http.Handler {
 
 func crateUserHandler(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-	var user entity.User
+	var user entity.UserCreations
 	if err := rest.ParseBody(w, r, &user); err != nil {
 		return
 	}

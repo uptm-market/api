@@ -25,7 +25,7 @@ func (um *UserManager) User(ctx context.Context, id string) (*entity.UserInfoVie
 	}
 	return userinfo, nil
 }
-func (um *UserManager) CreateUser(ctx context.Context, user entity.User) error {
+func (um *UserManager) CreateUser(ctx context.Context, user entity.UserCreations) error {
 
 	verify, err := db.VerifyUserExists(ctx, user.Email)
 	if err != nil {
