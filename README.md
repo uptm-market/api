@@ -70,8 +70,7 @@ sudo docker-compose up --build
   "email": "example@example.com",
   "name": "John Doe",
   "cellPhone": {
-    "countryCode": "+1",
-    "areaCode": "123",
+    "ddd": "22",
     "number": "4567890"
   },
   "city": "Sample City",
