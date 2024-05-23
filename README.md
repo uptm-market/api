@@ -41,3 +41,44 @@ sudo docker-compose up --build
 }
 
 ```
+#### Post
+
+```bash
+    /user/login
+
+```
+#### BODY
+
+```JSON
+{
+  "email": "example@example.com",
+  "password": "password123"
+}
+
+```
+#### Get
+
+```bash
+    /user/me
+
+```
+#### BODY
+
+```JSON
+{
+  "id": 123,
+  "email": "example@example.com",
+  "name": "John Doe",
+  "cellPhone": {
+    "countryCode": "+1",
+    "areaCode": "123",
+    "number": "4567890"
+  },
+  "city": "Sample City",
+  "state": "Sample State"
+}
+
+
+```
+
+

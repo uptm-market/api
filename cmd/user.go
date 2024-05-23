@@ -6,13 +6,14 @@ import (
 	"github.com/go-chi/chi"
 	"go.mod/core"
 	"go.mod/entity"
+	"go.mod/middleware"
 	"go.mod/rest"
 )
 
 func UserRouter() http.Handler {
 	r := chi.NewRouter()
 	r.Get("/{id}", userinfoHandler)
-	r.Get("/me", userinfoMeHandler)
+	r.Get("/me", middleware.AuthMiddlewareWithClaims(http.HandlerFunc(userinfoMeHandler)))
 	r.Post("/", crateUserHandler)
 	r.Post("/login", loginHandler)
 	return r
