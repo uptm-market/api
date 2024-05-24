@@ -54,6 +54,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	manager := core.NewUserManager()
 	token, err := manager.Login(ctx, login.Email, login.Password)
 	if err != nil {
+		rest.SendError(w, err)
 		return
 	}
 	rest.Send(w, "token-basic: "+token)

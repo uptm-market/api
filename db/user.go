@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"fmt"
 	"time"
 
 	infradb "go.mod/connect"
@@ -38,7 +39,7 @@ func VerifyCredentials(ctx context.Context, email, password string) (*entity.Use
 		Email:    email,
 		Password: password,
 	}
-
+	fmt.Println("testando now")
 	query := "SELECT id, email, level FROM users WHERE email = $1 AND password = $2"
 	rows, err := infradb.Get().QueryContext(ctx, query, email, password)
 	if err != nil {
