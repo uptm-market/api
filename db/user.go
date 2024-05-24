@@ -2,6 +2,8 @@ package db
 
 import (
 	"context"
+	"database/sql"
+	"errors"
 	"time"
 
 	infradb "go.mod/connect"
@@ -40,6 +42,9 @@ func VerifyCredentials(ctx context.Context, email, password string) (*entity.Use
 	query := "SELECT id, email, level FROM users WHERE email = $1 AND password = $2"
 	rows, err := infradb.Get().QueryContext(ctx, query, email, password)
 	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return nil, &rest.Error{Status: 400, Code: "user_not_found", Message: "User not found. Login declined."}
+		}
 		return nil, err
 	}
 	defer rows.Close()

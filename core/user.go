@@ -49,7 +49,9 @@ func (*UserManager) Login(ctx context.Context, email, password string) (string, 
 	if err != nil {
 		return "", rest.LogError(err, "um.Login db.VerifyCredentials")
 	}
-	log.Println("teste agr")
+	if user == nil {
+		return "", &rest.Error{Status: 400, Code: "invalid_user", Message: "Úsuario naos existe na plataforma"}
+	}
 	body := &entity.User{
 		ID:    user.ID,
 		Email: user.Email,
