@@ -25,6 +25,15 @@ func (c *UserCampaign) Create(ctx context.Context, body entity.FacebookCampaignA
 	return nil
 }
 
+func (c *UserCampaign) CreateCampaignFull(ctx context.Context, data v16.Campaign) error {
+	_, err := fb.InitConfig().Campaigns.Create(ctx, data)
+	if err != nil {
+		return rest.LogError(err, "c.UserCampaign.CreateCampaignfull fb.Create")
+	}
+
+	return nil
+}
+
 func (c *UserCampaign) Get(ctx context.Context, userId int) ([]v16.Campaign, error) {
 	var arrayReturn []v16.Campaign
 	ar, err := db.ReturnCampaign(ctx, userId)

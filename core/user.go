@@ -47,7 +47,7 @@ func (*UserManager) Login(ctx context.Context, email, password string) (string, 
 	// Aqui, estou usando uma função fictícia chamada VerifyCredentials como exemplo.
 	user, err := db.VerifyCredentials(ctx, email, password)
 	if err != nil {
-		return "", rest.LogError(err, "um.Login db.VerifyCredentials")
+		return "", &rest.Error{Status: 400, Code: "invalid_user", Message: "Usuario não existe na plataforma"}
 	}
 	if user == nil || user.ID == 0 {
 		return "", &rest.Error{Status: 400, Code: "invalid_user", Message: "Usuario não existe na plataforma"}

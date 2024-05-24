@@ -16,6 +16,16 @@ const (
 	campaignID  = "ID_DA_CAMPANHA"
 )
 
+func InitConfig() *v16.Service {
+	fbService, err := v16.New(nil, accessToken, appSecret)
+	if err != nil {
+		rest.LogError(err, "Erro ao criar conexao com api do facebook")
+		return nil
+	}
+
+	return fbService
+}
+
 func Init(ctx context.Context, ID entity.FacebookCampaignAdAccount) []v16.Campaign {
 
 	fbService, err := v16.New(nil, accessToken, appSecret)

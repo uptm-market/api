@@ -67,7 +67,7 @@ func ReturnUserById(ctx context.Context, id string) (*entity.UserInfoView, error
 	select 
 	email,
 	name,
-	birth_date,
+	birthdate,
 	gender,
 	cpf,
 	cell_phone,
