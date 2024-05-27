@@ -34,7 +34,7 @@ func (c *UserCampaign) CreateCampaignFull(ctx context.Context, data v16.Campaign
 	return nil
 }
 
-func (c *UserCampaign) Get(ctx context.Context, userId int) ([]v16.Campaign, error) {
+func (c *UserCampaign) List(ctx context.Context, userId int) ([]v16.Campaign, error) {
 	var arrayReturn []v16.Campaign
 	ar, err := db.ReturnCampaign(ctx, userId)
 	if err != nil {
@@ -48,4 +48,13 @@ func (c *UserCampaign) Get(ctx context.Context, userId int) ([]v16.Campaign, err
 
 	return arrayReturn, nil
 
+}
+
+func (c *UserCampaign) Get(ctx context.Context, campaign string) (*v16.Campaign, error) {
+	data, err := fb.InitConfig().Campaigns.Get(ctx, campaign)
+	if err != nil {
+		return nil, &rest.Error{Status: 400, Code: "bad_request_fb_lib", Message: err.Error()}
+	}
+
+	return data, nil
 }

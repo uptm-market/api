@@ -14,8 +14,8 @@ import (
 
 func CampaignRouter() http.Handler {
 	r := chi.NewRouter()
-	r.Post("/campaign", middleware.AuthMiddleware(getIndexHandlerFunc(createCampaignHandler)))
 	r.Get("/campaign", middleware.AuthMiddleware(getIndexHandlerFunc(returnCampaignHandler)))
+	r.Post("/campaign", middleware.AuthMiddleware(getIndexHandlerFunc(createCampaignHandler)))
 	r.Post("/campaign/copy", middleware.AuthMiddleware(getIndexHandlerFunc(cloneCampaignHandler)))
 
 	return r
@@ -56,18 +56,29 @@ func createCampaignHandler(w http.ResponseWriter, r *http.Request) {
 func returnCampaignHandler(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	userId := r.URL.Query().Get("user_id")
+	cpID := r.URL.Query().Get("cp_id")
 	manager := core.NewUserCampaign()
-	userIdInt, err := strconv.Atoi(userId)
-	if err != nil {
-		rest.SendError(w, err)
-		return
+	if cpID == "" {
+		userIdInt, err := strconv.Atoi(userId)
+		if err != nil {
+			rest.SendError(w, err)
+			return
+		}
+		send, err := manager.List(ctx, userIdInt)
+		if err != nil {
+			rest.SendError(w, err)
+			return
+		}
+		rest.Send(w, send)
+	} else {
+		data, err := manager.Get(ctx, cpID)
+		if err != nil {
+			rest.SendError(w, err)
+			return
+		}
+		rest.Send(w, data)
 	}
-	send, err := manager.Get(ctx, userIdInt)
-	if err != nil {
-		rest.SendError(w, err)
-		return
-	}
-	rest.Send(w, send)
+
 }
 
 func cloneCampaignHandler(w http.ResponseWriter, r *http.Request) {
