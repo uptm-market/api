@@ -56,7 +56,8 @@ func (*UserManager) Login(ctx context.Context, email, password string) (string, 
 		ID:    user.ID,
 		Email: user.Email,
 	}
-	token, err := middleware.GenerateToken(body)
+	log.Println(body.ID, body.Email)
+	token, err := middleware.CreateToken(ctx, body.ID, body.Email, 1)
 	if err != nil {
 		return "", rest.LogError(err, "middleware.generatetoken")
 	}
@@ -64,7 +65,9 @@ func (*UserManager) Login(ctx context.Context, email, password string) (string, 
 }
 
 func (m *UserManager) GetMeInfo(ctx context.Context) (*entity.ReturnUserInfo, error) {
-	info, err := db.ReturnInfoMe(ctx, ctx.Value("userID").(string))
+
+	id := ctx.Value("userid").(uint)
+	info, err := db.ReturnInfoMe(ctx, id)
 	if err != nil {
 		log.Println("user.GetMeInfo db.ReturnInfoMe error:", err)
 		return nil, err

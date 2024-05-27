@@ -133,9 +133,9 @@ func VerificationTimeUser(ctx context.Context, userID string) (bool, error) {
 	return false, nil
 }
 
-func ReturnInfoMe(ctx context.Context, Id string) (*entity.ReturnUserInfo, error) {
+func ReturnInfoMe(ctx context.Context, Id uint) (*entity.ReturnUserInfo, error) {
 	var data entity.ReturnUserInfo
-	err := infradb.Get().QueryRowContext(ctx, `select id, name, email, level, cellphone, city from users where id =$1`, Id).Scan(&data.ID, &data.Name, &data.Email, &data.Level, &data.CellPhone, &data.City)
+	err := infradb.Get().QueryRowContext(ctx, `select id, name, email, level from users where id =$1`, Id).Scan(&data.ID, &data.Name, &data.Email, &data.Level)
 	if err != nil {
 		return nil, err
 	}

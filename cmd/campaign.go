@@ -13,8 +13,8 @@ import (
 
 func CampaignRouter() http.Handler {
 	r := chi.NewRouter()
-	r.Post("/campaign", middleware.AuthMiddlewareWithClaims(http.HandlerFunc(createCampaignHandler)))
-	r.Get("/campaign", middleware.AuthMiddlewareWithClaims(http.HandlerFunc(returnCampaignHandler)))
+	r.Post("/campaign", middleware.AuthMiddleware(getIndexHandlerFunc(createCampaignHandler)))
+	r.Get("/campaign", middleware.AuthMiddleware(getIndexHandlerFunc(returnCampaignHandler)))
 
 	return r
 }

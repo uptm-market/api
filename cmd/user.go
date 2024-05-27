@@ -13,7 +13,7 @@ import (
 func UserRouter() http.Handler {
 	r := chi.NewRouter()
 	r.Get("/{id}", userinfoHandler)
-	r.Get("/me", middleware.AuthMiddlewareWithClaims(http.HandlerFunc(userinfoMeHandler)))
+	r.Get("/me", middleware.AuthMiddleware(getIndexHandlerFunc(userinfoMeHandler)))
 	r.Post("/", crateUserHandler)
 	r.Post("/login", loginHandler)
 	return r
@@ -28,7 +28,7 @@ func crateUserHandler(w http.ResponseWriter, r *http.Request) {
 	manager := core.NewUserManager()
 	err := manager.CreateUser(ctx, user)
 	if err != nil {
-		rest.LogError(err, "Error creating user")
+		rest.SendError(w, err)
 		return
 	}
 }
@@ -57,7 +57,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 		rest.SendError(w, err)
 		return
 	}
-	rest.Send(w, "token-basic: "+token)
+	rest.Send(w, token)
 }
 
 func userinfoMeHandler(w http.ResponseWriter, r *http.Request) {

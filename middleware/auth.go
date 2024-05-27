@@ -1,78 +1,32 @@
 package middleware
 
 import (
-	"context"
 	"fmt"
 	"net/http"
-
-	"github.com/dgrijalva/jwt-go"
-	"go.mod/db"
-	"go.mod/rest"
 )
 
-// AuthMiddlewareWithClaims é um middleware que verifica a autenticidade do token e extrai as informações.
-func AuthMiddlewareWithClaims(next http.Handler) http.HandlerFunc {
-
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		// Obtenha o token do cabeçalho de autorização.
-		authToken := r.Header.Get("Authorization")
-		if authToken == "" {
-			http.Error(w, "Unauthorized", http.StatusUnauthorized)
-			return
-		}
-
-		// Parse do token com a chave secreta.
-		token, err := jwt.Parse(authToken, func(token *jwt.Token) (interface{}, error) {
-			// Verifique se o método de assinatura é válido.
-			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-				return nil, fmt.Errorf("método de assinatura inválido")
-			}
-			return SecretKey, nil
-		})
-
+func AuthMiddleware(next http.Handler) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		authenticated, err := ValidateToken(r)
 		if err != nil {
-			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+			w.WriteHeader(http.StatusUnauthorized)
+			fmt.Fprintf(w, "Autenticação necessária.")
 			return
 		}
-
-		// Verifique se o token é válido.
-		if !token.Valid {
-			http.Error(w, "Unauthorized", http.StatusUnauthorized)
-			return
+		if authenticated {
+			next.ServeHTTP(w, r)
+		} else {
+			w.WriteHeader(http.StatusUnauthorized)
+			fmt.Fprintf(w, "Autenticação necessária.")
 		}
-
-		// Extraia as claims do token.
-		claims, ok := token.Claims.(jwt.MapClaims)
-		if !ok {
-			http.Error(w, "Erro ao obter informações do token", http.StatusInternalServerError)
-			return
-		}
-
-		// Agora você tem acesso às informações do usuário no mapa 'claims'.
-		// Exemplo: id := claims["id"].(uint)
-		//          email := claims["email"].(string)
-		//          level := claims["level"].(uint8)
-
-		// Adicione as informações do usuário ao contexto para uso posterior se necessário.
-		ctx := context.WithValue(r.Context(), "userID", claims["id"])
-		ctx = context.WithValue(ctx, "userEmail", claims["email"])
-		ctx = context.WithValue(ctx, "userLevel", claims["level"])
-		if err := VerificationTimeUser(ctx, claims["id"].(string)); err != nil {
-			rest.SendError(w, err)
-		}
-		// Passe para o próximo middleware ou manipulador com o contexto atualizado.
-		next.ServeHTTP(w, r.WithContext(ctx))
-	})
+	}
 }
 
-func VerificationTimeUser(ctx context.Context, userId string) error {
-	validate, err := db.VerificationTimeUser(ctx, userId)
-	if err != nil {
-		return rest.LogError(err, "VerificationTimeUser")
+func Authenticate(next http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		if _, err := ValidateToken(r); err != nil {
+			return
+		}
+		next(w, r)
 	}
-	if !validate {
-		return &rest.Error{Status: 401, Code: "error_auth", Message: "o tempo de uso gratuito do servico expirou, faca a contratacao para continuar"}
-	}
-
-	return nil
 }
