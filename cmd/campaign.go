@@ -5,6 +5,7 @@ import (
 	"strconv"
 
 	"github.com/go-chi/chi"
+	v16 "github.com/justwatch/facebook-marketing-api-golang-sdk/marketing/v16"
 	"go.mod/core"
 	"go.mod/entity"
 	"go.mod/middleware"
@@ -15,6 +16,7 @@ func CampaignRouter() http.Handler {
 	r := chi.NewRouter()
 	r.Post("/campaign", middleware.AuthMiddleware(getIndexHandlerFunc(createCampaignHandler)))
 	r.Get("/campaign", middleware.AuthMiddleware(getIndexHandlerFunc(returnCampaignHandler)))
+	r.Post("/campaign/copy", middleware.AuthMiddleware(getIndexHandlerFunc(cloneCampaignHandler)))
 
 	return r
 }
@@ -66,4 +68,19 @@ func returnCampaignHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rest.Send(w, send)
+}
+
+func cloneCampaignHandler(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	var data v16.Campaign
+	if err := rest.ParseBody(w, r, &data); err != nil {
+		rest.SendError(w, err)
+		return
+	}
+	manager := core.NewUserCampaign()
+	err := manager.CreateCampaignFull(ctx, data)
+	if err != nil {
+		rest.SendError(w, err)
+		return
+	}
 }
