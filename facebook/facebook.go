@@ -34,7 +34,7 @@ func Init(ctx context.Context, ID entity.FacebookCampaignAdAccount) []v16.Campai
 		return nil
 	}
 
-	id := "[account_id]"
+	id := ID.AdAccountID
 
 	campaigns, err := fbService.Campaigns.List(id).Do(ctx)
 	if err != nil {
