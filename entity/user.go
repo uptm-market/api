@@ -35,6 +35,16 @@ type UserCreations struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
 }
+
+type UserUpdated struct {
+	Email string `json:"email"`
+	CPF   string `json:"cpf"`
+}
+
+type UpdatePassword struct {
+	OldPassowrd string `json:"oldPassowrd"`
+	NewPassword string `json:"newPassword"`
+}
 type UserInfoView struct {
 	ID           uint          `json:"id,omitempty"`
 	Email        string        `json:"email"`

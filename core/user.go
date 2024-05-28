@@ -41,7 +41,56 @@ func (um *UserManager) CreateUser(ctx context.Context, user entity.UserCreations
 	}
 	return nil
 }
+func (um *UserManager) UpdatedUser(ctx context.Context, user entity.UserUpdated, id uint) error {
+	idctx := ctx.Value("userid").(uint)
+	// verify, err := db.VerifyUserExists(ctx, user.Email)
+	// if err != nil {
+	// 	return rest.LogError(err)
+	// }
+	// if verify {
+	// 	return &rest.Error{Status: 400, Message: "Esse e-mail já esta em uso na plataforma", Code: "aleready_exists"}
+	// }
+	data, err := db.ReturnInfoMe(ctx, id)
+	if err != nil {
+		return rest.LogError(err)
+	}
 
+	if data.ID != idctx {
+		return &rest.Error{Status: 400, Message: "O usuario nao confere", Code: "bad_request"}
+	}
+	err = db.Update(ctx, user, id)
+	if err != nil {
+		return rest.LogError(err, "um.CreateUser db.Create")
+	}
+	return nil
+}
+
+func (um *UserManager) UpdatedPassowrd(ctx context.Context, user entity.UpdatePassword, id uint) error {
+	idctx := ctx.Value("userid").(uint)
+	data, err := db.ReturnInfoMe(ctx, id)
+	if err != nil {
+		return rest.LogError(err)
+	}
+
+	if data.ID != idctx {
+		return &rest.Error{Status: 400, Message: "O usuario nao confere", Code: "bad_request"}
+	}
+
+	pass, err := db.ReturnPassword(ctx, id)
+	if err != nil {
+		return rest.LogError(err)
+	}
+
+	if pass == &user.OldPassowrd {
+		err := db.UpdatedPassword(ctx, user, id)
+		if err != nil {
+			return rest.LogError(err)
+		}
+
+	}
+
+	return nil
+}
 func (*UserManager) Login(ctx context.Context, email, password string) (string, error) {
 	// Implemente a lógica para verificar as credenciais do usuário no banco de dados.
 	// Aqui, estou usando uma função fictícia chamada VerifyCredentials como exemplo.

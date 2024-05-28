@@ -17,6 +17,7 @@ func CampaignRouter() http.Handler {
 	r.Get("/", middleware.AuthMiddleware(getIndexHandlerFunc(returnCampaignHandler)))
 	r.Post("/", middleware.AuthMiddleware(getIndexHandlerFunc(createCampaignHandler)))
 	r.Post("/copy", middleware.AuthMiddleware(getIndexHandlerFunc(cloneCampaignHandler)))
+	// r.Put("/", middleware.AuthMiddleware(getIndexHandlerFunc(updateCampaign)))
 
 	return r
 }
@@ -95,3 +96,14 @@ func cloneCampaignHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+
+// func updateCampaign(w http.ResponseWriter, r *http.Request) {
+// 	ctx := r.Context()
+// 	var data v16.Ad
+// 	if err := rest.ParseBody(w, r, &data); err != nil {
+// 		rest.SendError(w, err)
+// 		return
+// 	}
+// 	manager := core.NewUserCampaign()
+// 	// err := manager.updateCampaign(ctx, data)
+// }

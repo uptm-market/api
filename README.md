@@ -76,7 +76,43 @@ sudo docker-compose up --build
 
 ```
 
+#### PUT
 
+```bash
+    /user/{ID}
+
+```
+#### Response
+
+```JSON
+{
+    "email": "user@example.com",
+    "cpf": "123.456.789-00"
+}
+
+
+
+```
+
+
+#### PUT
+
+```bash
+    /user/{ID}/password
+
+```
+#### Response
+
+```JSON
+{
+    "oldPassword": "oldPassword123",
+    "newPassword": "newPassword456"
+}
+
+
+
+
+```
 
 
 ## Campanha de Anuncio

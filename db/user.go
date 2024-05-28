@@ -34,6 +34,27 @@ func Create(ctx context.Context, user entity.UserCreations) error {
 	return err
 }
 
+func Update(ctx context.Context, user entity.UserUpdated, id uint) error {
+	query := `
+	UPDATE users
+	SET
+	email = $2,
+		cpf = $3
+		
+	WHERE
+	id = $1
+		
+	`
+
+	_, err := infradb.Get().ExecContext(ctx, query,
+		id,
+		user.Email,
+		user.CPF,
+	)
+
+	return err
+}
+
 func VerifyCredentials(ctx context.Context, email, password string) (*entity.User, error) {
 	user := &entity.User{
 		Email:    email,
@@ -140,6 +161,29 @@ func ReturnInfoMe(ctx context.Context, Id uint) (*entity.ReturnUserInfo, error) 
 		return nil, err
 	}
 	return &data, nil
+}
+
+func ReturnPassword(ctx context.Context, Id uint) (*string, error) {
+	var pass string
+	err := infradb.Get().QueryRowContext(ctx, `select password from users where id =$1`, Id).Scan(&pass)
+	if err != nil {
+		return nil, err
+	}
+	return &pass, nil
+}
+
+func UpdatedPassword(ctx context.Context, data entity.UpdatePassword, Id uint) error {
+	_, err := infradb.Get().ExecContext(ctx, `
+	UPDATE users
+	SET
+		password = $2
+	WHERE
+		id = $1
+	`, Id, data.NewPassword)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func VerifyUserExists(ctx context.Context, email string) (bool, error) {

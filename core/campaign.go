@@ -21,7 +21,6 @@ func (c *UserCampaign) Create(ctx context.Context, body entity.FacebookCampaignA
 	if err := db.CreateFacebookCampaign(ctx, body); err != nil {
 		return rest.LogError(err, "CreateFacebookCampaign")
 	}
-
 	return nil
 }
 
@@ -58,3 +57,7 @@ func (c *UserCampaign) Get(ctx context.Context, campaign string) (*v16.Campaign,
 
 	return data, nil
 }
+
+// func (c *UserCampaign) updateCampaign(ctx context.Context, data v16.Ad) {
+// 	err := fb.InitConfig().Ads.Update(ctx, da)
+// }

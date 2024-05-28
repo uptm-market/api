@@ -16,6 +16,7 @@ CREATE TABLE users (
     birthdate DATE,
     gender varchar,
     cpf VARCHAR(14),
+    type_plan integer, 
     source SMALLINT,
     record_date TIMESTAMP ,
     level INTEGER
