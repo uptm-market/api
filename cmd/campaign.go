@@ -14,9 +14,9 @@ import (
 
 func CampaignRouter() http.Handler {
 	r := chi.NewRouter()
-	r.Get("/campaign", middleware.AuthMiddleware(getIndexHandlerFunc(returnCampaignHandler)))
-	r.Post("/campaign", middleware.AuthMiddleware(getIndexHandlerFunc(createCampaignHandler)))
-	r.Post("/campaign/copy", middleware.AuthMiddleware(getIndexHandlerFunc(cloneCampaignHandler)))
+	r.Get("/", middleware.AuthMiddleware(getIndexHandlerFunc(returnCampaignHandler)))
+	r.Post("/", middleware.AuthMiddleware(getIndexHandlerFunc(createCampaignHandler)))
+	r.Post("/copy", middleware.AuthMiddleware(getIndexHandlerFunc(cloneCampaignHandler)))
 
 	return r
 }
@@ -25,8 +25,8 @@ func createCampaignHandler(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	userId := r.URL.Query().Get("user_id")
 	type Body struct {
-		CampaignAccountID string `json:"campaign_account_id"`
-		AdAccountID       string `json:"ad_account_id"`
+		CampaignAccountID string `json:"app_secret"`
+		AdAccountID       string `json:"token"`
 	}
 	var body Body
 	if err := rest.ParseBody(w, r, &body); err != nil {
