@@ -156,7 +156,7 @@ func VerificationTimeUser(ctx context.Context, userID string) (bool, error) {
 
 func ReturnInfoMe(ctx context.Context, Id uint) (*entity.ReturnUserInfo, error) {
 	var data entity.ReturnUserInfo
-	err := infradb.Get().QueryRowContext(ctx, `select id, name, email, level from users where id =$1`, Id).Scan(&data.ID, &data.Name, &data.Email, &data.Level)
+	err := infradb.Get().QueryRowContext(ctx, `select id, name, email,cpf ,level from users where id =$1`, Id).Scan(&data.ID, &data.Name, &data.Email, &data.CPF, &data.Level)
 	if err != nil {
 		return nil, err
 	}
