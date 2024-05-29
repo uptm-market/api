@@ -34,15 +34,14 @@ func (c *UserCampaign) CreateCampaignFull(ctx context.Context, data v16.Campaign
 }
 
 func (c *UserCampaign) List(ctx context.Context, userId int) ([]v16.Campaign, error) {
-	var arrayReturn []v16.Campaign
-	ar, err := db.ReturnCampaign(ctx, userId)
+
+	// ar, err := db.ReturnCampaign(ctx, userId)
+	// if err != nil {
+	// 	return nil, rest.LogError(err, "ReturnCampaign")
+	// }
+	arrayReturn, err := fb.InitConfig().Campaigns.List("897979998435276").Do(ctx)
 	if err != nil {
-		return nil, rest.LogError(err, "ReturnCampaign")
-	}
-	size := len(ar)
-	for i := 0; i < size; i++ {
-		returnBody := fb.Init(ctx, ar[i])
-		arrayReturn = append(arrayReturn, returnBody[i])
+		return nil, &rest.Error{Status: 400, Code: "bad_request_fb_lib", Message: err.Error()}
 	}
 
 	return arrayReturn, nil
