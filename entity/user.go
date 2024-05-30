@@ -42,7 +42,7 @@ type UserUpdated struct {
 }
 
 type UpdatePassword struct {
-	OldPassowrd string `json:"oldPassowrd"`
+	OldPassword string `json:"oldPassword"`
 	NewPassword string `json:"newPassword"`
 }
 type UserInfoView struct {

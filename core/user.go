@@ -71,7 +71,7 @@ func (um *UserManager) UpdatedPassowrd(ctx context.Context, user entity.UpdatePa
 	if err != nil {
 		return rest.LogError(err)
 	}
-
+	log.Println(user)
 	if data.ID != idctx {
 		return &rest.Error{Status: 400, Message: "O usuario nao confere", Code: "bad_request"}
 	}
@@ -80,8 +80,9 @@ func (um *UserManager) UpdatedPassowrd(ctx context.Context, user entity.UpdatePa
 	if err != nil {
 		return rest.LogError(err)
 	}
-
-	if pass == &user.OldPassowrd {
+	log.Println("teste 01", *pass)
+	log.Println("teste 02", user.OldPassword)
+	if *pass == user.OldPassword {
 		err := db.UpdatedPassword(ctx, user, id)
 		if err != nil {
 			return rest.LogError(err)

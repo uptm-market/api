@@ -98,9 +98,18 @@ func updateUserHandler(w http.ResponseWriter, r *http.Request) {
 
 func updatePasswordHandler(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-	var data entity.UpdatePassword
+	type Updated struct {
+		OldPassowrd string `json:"oldPassword"`
+		NewPassword string `json:"newPassword"`
+	}
+
+	var data Updated
 	if err := rest.ParseBody(w, r, &data); err != nil {
 		return
+	}
+	json := entity.UpdatePassword{
+		OldPassword: data.OldPassowrd,
+		NewPassword: data.NewPassword,
 	}
 	id := chi.URLParam(r, "id")
 	manager := core.NewUserManager()
@@ -109,7 +118,7 @@ func updatePasswordHandler(w http.ResponseWriter, r *http.Request) {
 		rest.SendError(w, err)
 		return
 	}
-	err = manager.UpdatedPassowrd(ctx, data, uint(ids))
+	err = manager.UpdatedPassowrd(ctx, json, uint(ids))
 	if err != nil {
 		rest.SendError(w, err)
 		return

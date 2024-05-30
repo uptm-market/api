@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"log"
 	"time"
 
 	infradb "go.mod/connect"
@@ -173,6 +174,10 @@ func ReturnPassword(ctx context.Context, Id uint) (*string, error) {
 }
 
 func UpdatedPassword(ctx context.Context, data entity.UpdatePassword, Id uint) error {
+	log.Println("final", data)
+	log.Println("id", Id)
+	log.Println("data.new", data.NewPassword)
+
 	_, err := infradb.Get().ExecContext(ctx, `
 	UPDATE users
 	SET
