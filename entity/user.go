@@ -69,7 +69,7 @@ type ReturnUserInfo struct {
 	Email     string        `json:"email"`
 	Name      string        `json:"name"`
 	CellPhone tel.Telephone `json:"cellPhone"`
-	CPF       *string       `json:": cpf,omitempty"`
+	CPF       *string       `json:"cpf"`
 	City      string        `json:"city,omitempty"`
 	State     string        `json:"state,omitempty"`
 	Level     uint8         `json:"-"`
