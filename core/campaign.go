@@ -39,7 +39,7 @@ func (c *UserCampaign) List(ctx context.Context, userId int) ([]v16.Campaign, er
 	// if err != nil {
 	// 	return nil, rest.LogError(err, "ReturnCampaign")
 	// }
-	arrayReturn, err := fb.InitConfig().Campaigns.List("680041130165805").Do(ctx)
+	arrayReturn, err := fb.InitConfig().Campaigns.List("817578560219361").Do(ctx)
 	if err != nil {
 		return nil, &rest.Error{Status: 400, Code: "bad_request_fb_lib", Message: err.Error()}
 	}
