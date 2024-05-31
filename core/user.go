@@ -80,14 +80,14 @@ func (um *UserManager) UpdatedPassowrd(ctx context.Context, user entity.UpdatePa
 	if err != nil {
 		return rest.LogError(err)
 	}
-	log.Println("teste 01", *pass)
-	log.Println("teste 02", user.OldPassword)
 	if *pass == user.OldPassword {
 		err := db.UpdatedPassword(ctx, user, id)
 		if err != nil {
 			return rest.LogError(err)
 		}
 
+	} else {
+		return &rest.Error{Status: 400, Message: "A senha atual que foi passada está errada.", Code: "bad_request"}
 	}
 
 	return nil

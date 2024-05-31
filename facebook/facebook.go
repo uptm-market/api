@@ -10,8 +10,8 @@ import (
 
 const (
 	appID       = "SUA_APP_ID"
-	appSecret   = "bea9e01a01182211c02a7754a2e95b6e"
-	accessToken = "EAAF6ELj49ZAABOxyZBWNyIZBZBsNUHMlRwlDnqmKR7tlNVi1dcPtZCMcph3LhCbdX4JTAZCOTos69evof6o8ZB2arCWuvuAl3fbk0xQgli1CXuZCYwX4lRfI7iktjXOcPBNK8LZBag1JrZCRjSKU1zLLVJnAbMxkP3eOSjfju5bL0gbhvk5VwdqiNVNTXhrRYoccmg"
+	appSecret   = "121ad7ed5049737df0336cfc20e26f72"
+	accessToken = "EAAfXJXDJoCkBO1mqglUJFVRawEZC1YPZBOvXbXRiLZC1QDUgE0gxLgU4ZBYoz4J8Qvsyns3pPrslkeZBisdl63YPQ6JOdfQ9yQ0fuzrvz8X3oLaWi7IGXZBDqjONsEntsjD23ueNmpKR0hua1yuVOzgODWuGguKYvC1UgKwQhGMrSkO0LoJzzdSsoLyUWv1rTakGDo5gzAnvQbOKn4"
 	adAccountID = "ID_DA_CONTA_DE_ANUNCIOS"
 	campaignID  = "ID_DA_CAMPANHA"
 )
