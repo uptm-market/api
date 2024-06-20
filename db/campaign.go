@@ -8,7 +8,7 @@ import (
 )
 
 func CreateFacebookCampaign(ctx context.Context, data entity.FacebookCampaignAdAccount) error {
-	_, err := infradb.Get().ExecContext(ctx, `INSERT INTO facebook_campaign_ad_account (campaign_account_id, ad_account_id, user_id) VALUES($1, $2, $3)`, data.CampaignAccountID, data.CampaignAccountID, data.UserID)
+	_, err := infradb.Get().ExecContext(ctx, `INSERT INTO facebook_campaign_ad_account (token_id,app_secret, act, user_id) VALUES($1, $2, $3, $4)`, data.Token, data.AppSecret, data.Act, data.UserID)
 	if err != nil {
 		return err
 	}
@@ -23,7 +23,7 @@ func ReturnCampaign(ctx context.Context, userId int) ([]entity.FacebookCampaignA
 	}
 	var data entity.FacebookCampaignAdAccount
 	for rows.Next() {
-		rows.Scan(&data.ID, &data.CampaignAccountID, &data.AdAccountID, &data.UserID)
+		rows.Scan(&data.ID, &data.AppSecret, &data.Token, &data.UserID)
 		array = append(array, data)
 	}
 

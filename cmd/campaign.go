@@ -28,6 +28,7 @@ func createCampaignHandler(w http.ResponseWriter, r *http.Request) {
 	type Body struct {
 		CampaignAccountID string `json:"app_secret"`
 		AdAccountID       string `json:"token"`
+		Act               string `json:"act"`
 	}
 	var body Body
 	if err := rest.ParseBody(w, r, &body); err != nil {
@@ -38,9 +39,9 @@ func createCampaignHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	bodyData := entity.FacebookCampaignAdAccount{
-		UserID:            id,
-		CampaignAccountID: body.CampaignAccountID,
-		AdAccountID:       body.AdAccountID,
+		UserID:    id,
+		AppSecret: body.CampaignAccountID,
+		Token:     body.AdAccountID,
 	}
 
 	manager := core.NewUserCampaign()
