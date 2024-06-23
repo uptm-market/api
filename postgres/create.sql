@@ -42,7 +42,7 @@ CREATE TABLE facebook_campaign_ad_account (
     id INT PRIMARY KEY ,
     token_id VARCHAR(255) NOT NULL,
     app_secret VARCHAR(255) NOT NULL,
-    act VARCHAR not null,
+    business_id VARCHAR not null,
     user_id INT NOT NULL, 
     FOREIGN KEY (user_id) REFERENCES users(id)
 );

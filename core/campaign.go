@@ -33,18 +33,25 @@ func (c *UserCampaign) CreateCampaignFull(ctx context.Context, data v16.Campaign
 	return nil
 }
 
-func (c *UserCampaign) List(ctx context.Context, userId int) ([]v16.Campaign, error) {
-
-	// ar, err := db.ReturnCampaign(ctx, userId)
-	// if err != nil {
-	// 	return nil, rest.LogError(err, "ReturnCampaign")
-	// }
-	arrayReturn, err := fb.InitConfig().Campaigns.List("817578560219361").Do(ctx)
+func (c *UserCampaign) List(ctx context.Context, userId int) (*v16.CampaignListCall, error) {
+	var array []string
+	var arrayReturnCam *v16.CampaignListCall
+	ar, err := db.ReturnCampaign(ctx, userId)
 	if err != nil {
-		return nil, &rest.Error{Status: 400, Code: "bad_request_fb_lib", Message: err.Error()}
+		return nil, rest.LogError(err, "ReturnCampaign")
 	}
+	for i, a := range ar {
+		arrayReturn, err := fb.InitConfig().AdAccounts.List(ctx, a.BusinessID[i])
+		if err != nil {
+			return nil, &rest.Error{Status: 400, Code: "bad_request_fb_lib", Message: err.Error()}
+		}
+		array = append(array, arrayReturn[i].AccountID)
+	}
+	for _, a := range array {
+		arrayReturnCam = fb.InitConfig().Campaigns.List(a)
 
-	return arrayReturn, nil
+	}
+	return arrayReturnCam, nil
 
 }
 
