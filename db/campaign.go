@@ -21,9 +21,7 @@ VALUES ($1, $2)
 ON CONFLICT (user_id) 
 DO UPDATE SET token_id = EXCLUDED.token_id;
 `, data.Token, data.UserID)
-	if err == sql.ErrNoRows {
-		return nil
-	}
+
 	if err != nil {
 		return err
 	}
@@ -32,6 +30,9 @@ DO UPDATE SET token_id = EXCLUDED.token_id;
 
 func ReturnTokenFacebook(ctx context.Context, userId uint) (token string, err error) {
 	err = infradb.Get().QueryRowContext(ctx, `select token_id from facebook_campaign_ad_account_token where user_id=$1`, userId).Scan(&token)
+	if err == sql.ErrNoRows {
+		return "", nil
+	}
 	return token, err
 }
 func ReturnCampaign(ctx context.Context, userId int) ([]entity.FacebookCampaignAdAccount, error) {
