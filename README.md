@@ -127,8 +127,9 @@ sudo docker-compose up --build
 
 ```JSON
 {
-    "app_secret": "exampleCampaignAccountID",
-    "token": "exampleAdAccountID"
+  "app_secret": "your_campaign_account_id",
+  "token": "your_ad_account_id",
+  "businessID": ["business_id_1", "business_id_2", "business_id_3"]
 }
 
 
