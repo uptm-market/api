@@ -2,6 +2,7 @@ package db
 
 import (
 	"context"
+	"database/sql"
 
 	infradb "go.mod/connect"
 	"go.mod/entity"
@@ -20,6 +21,9 @@ VALUES ($1, $2)
 ON CONFLICT (user_id) 
 DO UPDATE SET token_id = EXCLUDED.token_id;
 `, data.Token, data.UserID)
+	if err == sql.ErrNoRows {
+		return nil
+	}
 	if err != nil {
 		return err
 	}
