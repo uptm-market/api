@@ -122,6 +122,13 @@ func (m *UserManager) GetMeInfo(ctx context.Context) (*entity.ReturnUserInfo, er
 		log.Println("user.GetMeInfo db.ReturnInfoMe error:", err)
 		return nil, err
 	}
+	token, err := db.ReturnTokenFacebook(ctx, id)
+	if err != nil {
+		log.Println("user.GetMeInfo db.ReturnTokenFacebook error:", err)
+		return nil, err
+	}
+	info.Token = &token
+
 	return info, nil
 
 }

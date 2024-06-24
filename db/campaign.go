@@ -15,9 +15,17 @@ func CreateFacebookCampaign(ctx context.Context, data entity.FacebookCampaignAdA
 		}
 
 	}
+	_, err := infradb.Get().ExecContext(ctx, `INSERT INTO facebook_campaign_ad_account (token_id, user_id) VALUES($1, $2)`, data.Token, data.UserID)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
+func ReturnTokenFacebook(ctx context.Context, userId uint) (token string, err error) {
+	err = infradb.Get().QueryRowContext(ctx, `select token_id from facebook_campaign_ad_account_token where user_id=$1`, userId).Scan(&token)
+	return token, err
+}
 func ReturnCampaign(ctx context.Context, userId int) ([]entity.FacebookCampaignAdAccount, error) {
 	var array []entity.FacebookCampaignAdAccount
 	rows, err := infradb.Get().QueryContext(ctx, `SELECT id, token_id,app_secret, business_id, user_id FROM facebook_campaign_ad_account where user_id=$1;`, userId)

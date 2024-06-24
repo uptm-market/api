@@ -40,9 +40,14 @@ CREATE TABLE related_sub_accounts_in_master_user (
 
 CREATE TABLE facebook_campaign_ad_account (
     id INT PRIMARY KEY ,
-    token_id VARCHAR(255) NOT NULL,
-    app_secret VARCHAR(255) NOT NULL,
-    business_id VARCHAR not null,
+    app_secret VARCHAR(255) ,
+    business_id ,
     user_id INT NOT NULL, 
     FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+
+CREATE TABLE facebook_campaign_ad_account_token(
+    id INT PRIMARY KEY ,
+    token_id VARCHAR(255) NOT NULL,
 );

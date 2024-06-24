@@ -41,7 +41,7 @@ func createCampaignHandler(w http.ResponseWriter, r *http.Request) {
 	bodyData := entity.FacebookCampaignAdAccount{
 		UserID:     id,
 		AppSecret:  body.CampaignAccountID,
-		Token:      body.AdAccountID,
+		Token:      &body.AdAccountID,
 		BusinessID: body.BusinessID,
 	}
 

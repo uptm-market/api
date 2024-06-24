@@ -5,7 +5,7 @@ import v16 "github.com/justwatch/facebook-marketing-api-golang-sdk/marketing/v16
 type FacebookCampaignAdAccount struct {
 	ID         int      `json:"id"`
 	AppSecret  string   `json:"app_secret"`
-	Token      string   `json:"token"`
+	Token      *string  `json:"token"`
 	UserID     int      `json:"user_id"`
 	BusinessID []string `json:"business_id"`
 	Act        string   `json:"act"`
