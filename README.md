@@ -120,7 +120,7 @@ sudo docker-compose up --build
 #### Post
 
 ```bash
-    /campaign/
+    /campaign/?user_id={passar user id aqui}
 
 ```
 #### BODY
