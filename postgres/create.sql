@@ -41,7 +41,7 @@ CREATE TABLE related_sub_accounts_in_master_user (
 CREATE TABLE facebook_campaign_ad_account (
     id INT PRIMARY KEY ,
     app_secret VARCHAR(255) ,
-    business_id ,
+    business_id VARCHAR(255),
     user_id INT NOT NULL, 
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
