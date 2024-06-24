@@ -5,7 +5,6 @@ import (
 
 	v16 "github.com/justwatch/facebook-marketing-api-golang-sdk/marketing/v16"
 	"go.mod/db"
-	"go.mod/entity"
 	"go.mod/rest"
 )
 
@@ -25,7 +24,7 @@ func InitConfig(ctx context.Context) *v16.Service {
 		return nil
 	}
 	if data != nil {
-		fbService, err = v16.New(nil, data[0].Token, data[0].AppSecret)
+		fbService, err = v16.New(nil, *data[0].Token, data[0].AppSecret)
 		if err != nil {
 			rest.LogError(err, "Erro ao criar conexao com api do facebook")
 			return nil
@@ -35,20 +34,20 @@ func InitConfig(ctx context.Context) *v16.Service {
 	return fbService
 }
 
-func Init(ctx context.Context, ID entity.FacebookCampaignAdAccount) []v16.Campaign {
+// func Init(ctx context.Context, ID entity.FacebookCampaignAdAccount) []v16.Campaign {
 
-	fbService, err := v16.New(nil, accessToken, appSecret)
-	if err != nil {
-		rest.LogError(err, "Erro ao criar conexao com api do facebook")
-		return nil
-	}
+// 	fbService, err := v16.New(nil, accessToken, appSecret)
+// 	if err != nil {
+// 		rest.LogError(err, "Erro ao criar conexao com api do facebook")
+// 		return nil
+// 	}
 
-	id := ID.Token
+// 	id := ID.Token
 
-	campaigns, err := fbService.Campaigns.List(id).Do(ctx)
-	if err != nil {
-		rest.LogError(err, "Erro ao retornar dados da campanha")
-		return nil
-	}
-	return campaigns
-}
+// 	campaigns, err := fbService.Campaigns.List(id).Do(ctx)
+// 	if err != nil {
+// 		rest.LogError(err, "Erro ao retornar dados da campanha")
+// 		return nil
+// 	}
+// 	return campaigns
+// }
