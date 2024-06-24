@@ -48,6 +48,6 @@ CREATE TABLE facebook_campaign_ad_account (
 
 
 CREATE TABLE facebook_campaign_ad_account_token(
-    id INT PRIMARY KEY ,
+    user_id INT PRIMARY KEY ,
     token_id VARCHAR(255) NOT NULL
 );
