@@ -4,6 +4,7 @@ import (
 	"context"
 
 	v16 "github.com/justwatch/facebook-marketing-api-golang-sdk/marketing/v16"
+	"go.mod/db"
 	"go.mod/entity"
 	"go.mod/rest"
 )
@@ -16,8 +17,13 @@ const (
 	campaignID  = "ID_DA_CAMPANHA"
 )
 
-func InitConfig() *v16.Service {
-	fbService, err := v16.New(nil, accessToken, appSecret)
+func InitConfig(ctx context.Context) *v16.Service {
+	data, err := db.ReturnCampaign(ctx, ctx.Value("userid").(int))
+	if err != nil {
+		rest.LogError(err, "Erro ao criar conexao com api do facebook, problema ao consultar db")
+		return nil
+	}
+	fbService, err := v16.New(nil, data[0].Token, data[0].AppSecret)
 	if err != nil {
 		rest.LogError(err, "Erro ao criar conexao com api do facebook")
 		return nil

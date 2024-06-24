@@ -25,7 +25,7 @@ func (c *UserCampaign) Create(ctx context.Context, body entity.FacebookCampaignA
 }
 
 func (c *UserCampaign) CreateCampaignFull(ctx context.Context, data v16.Campaign) error {
-	_, err := fb.InitConfig().Campaigns.Create(ctx, data)
+	_, err := fb.InitConfig(ctx).Campaigns.Create(ctx, data)
 	if err != nil {
 		return rest.LogError(err, "c.UserCampaign.CreateCampaignfull fb.Create")
 	}
@@ -41,14 +41,14 @@ func (c *UserCampaign) List(ctx context.Context, userId int) (*v16.CampaignListC
 		return nil, rest.LogError(err, "ReturnCampaign")
 	}
 	for i, a := range ar {
-		arrayReturn, err := fb.InitConfig().AdAccounts.List(ctx, a.BusinessID[i])
+		arrayReturn, err := fb.InitConfig(ctx).AdAccounts.List(ctx, a.BusinessID[i])
 		if err != nil {
 			return nil, &rest.Error{Status: 400, Code: "bad_request_fb_lib", Message: err.Error()}
 		}
 		array = append(array, arrayReturn[i].AccountID)
 	}
 	for _, a := range array {
-		arrayReturnCam = fb.InitConfig().Campaigns.List(a)
+		arrayReturnCam = fb.InitConfig(ctx).Campaigns.List(a)
 
 	}
 	return arrayReturnCam, nil
@@ -56,7 +56,7 @@ func (c *UserCampaign) List(ctx context.Context, userId int) (*v16.CampaignListC
 }
 
 func (c *UserCampaign) Get(ctx context.Context, campaign string) (*v16.Campaign, error) {
-	data, err := fb.InitConfig().Campaigns.Get(ctx, campaign)
+	data, err := fb.InitConfig(ctx).Campaigns.Get(ctx, campaign)
 	if err != nil {
 		return nil, &rest.Error{Status: 400, Code: "bad_request_fb_lib", Message: err.Error()}
 	}
