@@ -16,7 +16,7 @@ func CreateFacebookCampaign(ctx context.Context, data entity.FacebookCampaignAdA
 		}
 
 	}
-	_, err := infradb.Get().ExecContext(ctx, `INSERT INTO facebook_campaign_ad_account (token_id, user_id)
+	_, err := infradb.Get().ExecContext(ctx, `INSERT INTO facebook_campaign_ad_account_token (token_id, user_id)
 VALUES ($1, $2)
 ON CONFLICT (user_id) 
 DO UPDATE SET token_id = EXCLUDED.token_id;
