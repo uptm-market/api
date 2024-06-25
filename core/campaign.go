@@ -2,6 +2,7 @@ package core
 
 import (
 	"context"
+	"log"
 
 	v16 "github.com/justwatch/facebook-marketing-api-golang-sdk/marketing/v16"
 	"go.mod/db"
@@ -40,18 +41,24 @@ func (c *UserCampaign) List(ctx context.Context, userId int) (*v16.CampaignListC
 	if err != nil {
 		return nil, rest.LogError(err, "ReturnCampaign")
 	}
-
+	log.Println("001")
 	for i, a := range ar.BusinessID {
 		arrayReturn, err := fb.InitConfig(ctx).AdAccounts.List(ctx, a)
 		if err != nil {
 			return nil, &rest.Error{Status: 400, Code: "bad_request_fb_lib", Message: err.Error()}
 		}
+		log.Println("001 - meio")
+
 		array = append(array, arrayReturn[i].AccountID)
 	}
+	log.Println("002")
+
 	for _, a := range array {
 		arrayReturnCam = fb.InitConfig(ctx).Campaigns.List(a)
-
+		log.Println("002 - meio")
 	}
+	log.Println("003")
+
 	return arrayReturnCam, nil
 
 }

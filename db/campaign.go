@@ -3,6 +3,7 @@ package db
 import (
 	"context"
 	"database/sql"
+	"log"
 
 	infradb "go.mod/connect"
 	"go.mod/entity"
@@ -72,6 +73,6 @@ func ReturnCampaign(ctx context.Context, userId int) (*entity.FacebookCampaignAd
 
 	// Assign the business IDs to the data
 	data.BusinessID = strArray
-
+	log.Println("teste aqui")
 	return &data, nil
 }
