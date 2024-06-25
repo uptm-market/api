@@ -37,7 +37,7 @@ func ReturnTokenFacebook(ctx context.Context, userId uint) (token string, err er
 }
 func ReturnCampaign(ctx context.Context, userId int) ([]entity.FacebookCampaignAdAccount, error) {
 	var array []entity.FacebookCampaignAdAccount
-	rows, err := infradb.Get().QueryContext(ctx, `SELECT id, token_id,app_secret, business_id, user_id FROM facebook_campaign_ad_account where user_id=$1;`, userId)
+	rows, err := infradb.Get().QueryContext(ctx, `SELECT id, app_secret, business_id, user_id FROM facebook_campaign_ad_account where user_id=$1;`, userId)
 	if err != nil {
 		return nil, err
 	}
