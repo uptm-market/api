@@ -40,8 +40,8 @@ func (c *UserCampaign) List(ctx context.Context, userId int) (*v16.CampaignListC
 	if err != nil {
 		return nil, rest.LogError(err, "ReturnCampaign")
 	}
-	for i, a := range ar {
-		arrayReturn, err := fb.InitConfig(ctx).AdAccounts.List(ctx, a.BusinessID[i])
+	for i, a := range ar.BusinessID {
+		arrayReturn, err := fb.InitConfig(ctx).AdAccounts.List(ctx, a)
 		if err != nil {
 			return nil, &rest.Error{Status: 400, Code: "bad_request_fb_lib", Message: err.Error()}
 		}

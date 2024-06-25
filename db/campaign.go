@@ -35,18 +35,43 @@ func ReturnTokenFacebook(ctx context.Context, userId uint) (token string, err er
 	}
 	return token, err
 }
-func ReturnCampaign(ctx context.Context, userId int) ([]entity.FacebookCampaignAdAccount, error) {
-	var array []entity.FacebookCampaignAdAccount
-	rows, err := infradb.Get().QueryContext(ctx, `SELECT id, app_secret, business_id, user_id FROM facebook_campaign_ad_account where user_id=$1;`, userId)
+func ReturnCampaign(ctx context.Context, userId int) (*entity.FacebookCampaignAdAccount, error) {
+	// Define the query to fetch the main data
+	queryMain := `SELECT id, app_secret, user_id FROM facebook_campaign_ad_account WHERE user_id=$1`
+	// Define the query to fetch the business IDs
+	queryBusiness := `SELECT business_id FROM facebook_campaign_ad_account WHERE user_id=$1`
+
+	// Initialize a variable to hold the main data
+	var data entity.FacebookCampaignAdAccount
+
+	// Fetch the main data
+	err := infradb.Get().QueryRowContext(ctx, queryMain, userId).Scan(&data.ID, &data.AppSecret, &data.UserID)
 	if err != nil {
 		return nil, err
 	}
-	var data entity.FacebookCampaignAdAccount
+
+	// Fetch the business IDs
+	rows, err := infradb.Get().QueryContext(ctx, queryBusiness, userId)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	// Collect the business IDs into a slice
+	var strArray []string
 	for rows.Next() {
-		rows.Scan(&data.ID, &data.AppSecret, &data.Token, &data.UserID)
-		array = append(array, data)
+		var bid string
+		if err := rows.Scan(&bid); err != nil {
+			return nil, err
+		}
+		strArray = append(strArray, bid)
+	}
+	if err = rows.Err(); err != nil {
+		return nil, err
 	}
 
-	return array, nil
+	// Assign the business IDs to the data
+	data.BusinessID = strArray
 
+	return &data, nil
 }
