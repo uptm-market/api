@@ -24,7 +24,7 @@ func InitConfig(ctx context.Context) *v16.Service {
 		return nil
 	}
 	if data != nil {
-		fbService, err = v16.New(nil, *data[0].Token, data[0].AppSecret)
+		fbService, err = v16.New(nil, *data.Token, data.AppSecret)
 		if err != nil {
 			rest.LogError(err, "Erro ao criar conexao com api do facebook")
 			return nil

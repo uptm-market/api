@@ -40,6 +40,7 @@ func (c *UserCampaign) List(ctx context.Context, userId int) (*v16.CampaignListC
 	if err != nil {
 		return nil, rest.LogError(err, "ReturnCampaign")
 	}
+
 	for i, a := range ar.BusinessID {
 		arrayReturn, err := fb.InitConfig(ctx).AdAccounts.List(ctx, a)
 		if err != nil {
