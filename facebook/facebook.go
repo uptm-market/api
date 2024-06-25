@@ -18,7 +18,7 @@ const (
 
 func InitConfig(ctx context.Context) *v16.Service {
 	var fbService *v16.Service
-	data, err := db.ReturnCampaign(ctx, ctx.Value("userid").(int))
+	data, err := db.ReturnCampaign(ctx, int(ctx.Value("userid").(uint)))
 	if err != nil {
 		rest.LogError(err, "Erro ao criar conexao com api do facebook, problema ao consultar db")
 		return nil
