@@ -43,14 +43,20 @@ func (c *UserCampaign) List(ctx context.Context, userId int) (*v16.CampaignListC
 	}
 	log.Println("001")
 	for i, a := range ar.BusinessID {
+		log.Println("teste entrou")
 		arrayReturn, err := fb.InitConfig(ctx).AdAccounts.List(ctx, a)
 		if err != nil {
 			return nil, &rest.Error{Status: 400, Code: "bad_request_fb_lib", Message: err.Error()}
 		}
 		log.Println("001 - meio")
 
-		array = append(array, arrayReturn[i].AccountID)
+		// Check if arrayReturn has enough elements before accessing index i
+		if i < len(arrayReturn) {
+			log.Println("001 - meio - loop - array")
+			array = append(array, arrayReturn[i].AccountID)
+		}
 	}
+
 	log.Println("002")
 
 	for _, a := range array {

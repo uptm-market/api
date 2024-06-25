@@ -38,7 +38,10 @@ func ReturnTokenFacebook(ctx context.Context, userId uint) (token string, err er
 }
 func ReturnCampaign(ctx context.Context, userId int) (*entity.FacebookCampaignAdAccount, error) {
 	// Define the query to fetch the main data
-	queryMain := `SELECT id, app_secret, user_id FROM facebook_campaign_ad_account WHERE user_id=$1`
+	queryMain := `SELECT MIN(id) AS min_id, MIN(app_secret) AS min_app_secret, MIN(user_id) AS min_user_id
+FROM facebook_campaign_ad_account
+WHERE user_id = $1;
+`
 	// Define the query to fetch the business IDs
 	queryBusiness := `SELECT business_id FROM facebook_campaign_ad_account WHERE user_id=$1`
 

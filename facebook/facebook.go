@@ -2,6 +2,7 @@ package fb
 
 import (
 	"context"
+	"log"
 
 	v16 "github.com/justwatch/facebook-marketing-api-golang-sdk/marketing/v16"
 	"go.mod/db"
@@ -23,8 +24,18 @@ func InitConfig(ctx context.Context) *v16.Service {
 		rest.LogError(err, "Erro ao criar conexao com api do facebook, problema ao consultar db")
 		return nil
 	}
+
+	tk, err := db.ReturnTokenFacebook(ctx, uint(data.UserID))
+	if err != nil {
+		rest.LogError(err, "Erro ao criar conexao com api do facebook, problema ao consultar db")
+		return nil
+	}
+
+	log.Println(tk, "token")
+	log.Println(data.AppSecret, "app_secret")
+
 	if data != nil {
-		fbService, err = v16.New(nil, *data.Token, data.AppSecret)
+		fbService, err = v16.New(nil, tk, appSecret)
 		if err != nil {
 			rest.LogError(err, "Erro ao criar conexao com api do facebook")
 			return nil
