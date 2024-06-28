@@ -17,18 +17,18 @@ const (
 	campaignID  = "ID_DA_CAMPANHA"
 )
 
-func InitConfig(ctx context.Context) *v16.Service {
+func InitConfig(ctx context.Context) (*v16.Service, error) {
 	var fbService *v16.Service
 	data, err := db.ReturnCampaign(ctx, int(ctx.Value("userid").(uint)))
 	if err != nil {
 		rest.LogError(err, "Erro ao criar conexao com api do facebook, problema ao consultar db")
-		return nil
+		return nil, err
 	}
 
 	tk, err := db.ReturnTokenFacebook(ctx, uint(data.UserID))
 	if err != nil {
 		rest.LogError(err, "Erro ao criar conexao com api do facebook, problema ao consultar db")
-		return nil
+		return nil, err
 	}
 
 	log.Println(tk, "token")
@@ -38,11 +38,11 @@ func InitConfig(ctx context.Context) *v16.Service {
 		fbService, err = v16.New(nil, tk, appSecret)
 		if err != nil {
 			rest.LogError(err, "Erro ao criar conexao com api do facebook")
-			return nil
+			return nil, context.TODO().Err()
 		}
 	}
 
-	return fbService
+	return fbService, nil
 }
 
 // func Init(ctx context.Context, ID entity.FacebookCampaignAdAccount) []v16.Campaign {
