@@ -10,7 +10,7 @@ import (
 func Cp(token string) map[string]interface{} {
 
 	// URL da API com a variável do token
-	url := fmt.Sprintf("https://graph.facebook.com/v20.0/me?fields=adaccounts{campaigns{id,name}}&access_token=%s", token)
+	url := fmt.Sprintf("https://graph.facebook.com/v20.0/me?fields=adaccounts{campaigns{id,name,status,account_id,budget_rebalance_flag,buying_type,created_time,lifetime_budget,issues_info,source_campaign,special_ad_category,special_ad_category_country,start_time,stop_time,daily_budget,budget_remaining}}&access_token=%s", token)
 
 	// Crie uma nova solicitação HTTP
 	req, err := http.NewRequest("GET", url, nil)
