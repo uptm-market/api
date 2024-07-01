@@ -37,7 +37,7 @@ func (c *UserCampaign) CreateCampaignFull(ctx context.Context, data v16.Campaign
 	return nil
 }
 
-func (c *UserCampaign) List(ctx context.Context, userId int) (string, error) {
+func (c *UserCampaign) List(ctx context.Context, userId int) (map[string]interface{}, error) {
 	// var array []string
 	// var arrayReturnCam *v16.CampaignListCall
 	// ar, err := db.ReturnCampaign(ctx, userId)
@@ -82,7 +82,7 @@ func (c *UserCampaign) List(ctx context.Context, userId int) (string, error) {
 	tk, err := db.ReturnTokenFacebook(ctx, uint(userId))
 	if err != nil {
 		rest.LogError(err, "Erro ao criar conexao com api do facebook, problema ao consultar db")
-		return "", err
+		return nil, err
 	}
 	st := fb.Cp(tk)
 	return st, nil
