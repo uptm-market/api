@@ -84,7 +84,7 @@ func Cp(token string) map[string]interface{} {
 func CpByBusinessID(token string, businessId string) map[string]interface{} {
 	business := businessId
 	accessToken := token
-	url := fmt.Sprintf("https://graph.facebook.com/v20.0/%s?field=owned_ad_accounts&access_token=%s", business, accessToken)
+	url := fmt.Sprintf("https://graph.facebook.com/v20.0/%s?fields=owned_ad_accounts&access_token=%s", business, accessToken)
 
 	resp, err := http.Get(url)
 	if err != nil {
@@ -93,5 +93,16 @@ func CpByBusinessID(token string, businessId string) map[string]interface{} {
 	}
 	defer resp.Body.Close()
 
-	fmt.Println("Response status:", resp.Status)
+	if resp.StatusCode != http.StatusOK {
+		fmt.Println("Error: received non-200 response status", resp.Status)
+		return nil
+	}
+
+	var result map[string]interface{}
+	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+		fmt.Println("Error decoding response:", err)
+		return nil
+	}
+
+	return result
 }
