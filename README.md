@@ -243,3 +243,17 @@ sudo docker-compose up --build
 ```
 
 
+## NOVOS
+
+- PUT /campaign/active/:id
+- GET /campaign/list/businessid/:userId
+- GET /campaign/listAll/:userId
+```JSON
+{
+  "name": "Business Name",
+  "id": "Business ID"
+}
+
+
+```
+
