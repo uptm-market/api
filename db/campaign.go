@@ -40,7 +40,7 @@ func ReturnCampaign(ctx context.Context, userId int) (*entity.FacebookCampaignAd
 	// Define the query to fetch the main data
 	queryMain := `SELECT MIN(id) AS min_id, MIN(app_secret) AS min_app_secret, MIN(user_id) AS min_user_id
 FROM facebook_campaign_ad_account
-WHERE user_id = $1;
+WHERE user_id = $1 ;
 `
 	// Define the query to fetch the business IDs
 	queryBusiness := `SELECT business_id, name FROM facebook_campaign_ad_account WHERE user_id=$1`
@@ -65,7 +65,7 @@ WHERE user_id = $1;
 	var strArray []entity.Business
 	for rows.Next() {
 		var bid entity.Business
-		if err := rows.Scan(&bid); err != nil {
+		if err := rows.Scan(&bid.ID, &bid.Name); err != nil {
 			return nil, err
 		}
 		strArray = append(strArray, bid)
