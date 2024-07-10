@@ -17,6 +17,8 @@ func CampaignRouter() http.Handler {
 	r.Get("/", middleware.AuthMiddleware(getIndexHandlerFunc(returnCampaignHandler)))
 	r.Post("/", middleware.AuthMiddleware(getIndexHandlerFunc(createCampaignHandler)))
 	r.Post("/copy", middleware.AuthMiddleware(getIndexHandlerFunc(cloneCampaignHandler)))
+	r.Put("/active/{id}", middleware.AuthMiddleware(getIndexHandlerFunc(activeHandler)))
+	r.Get("/list/businessid/{userId}", middleware.AuthMiddleware(getIndexHandlerFunc(listBusinessHandler)))
 	// r.Put("/", middleware.AuthMiddleware(getIndexHandlerFunc(updateCampaign)))
 
 	return r
@@ -26,9 +28,9 @@ func createCampaignHandler(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	userId := r.URL.Query().Get("user_id")
 	type Body struct {
-		CampaignAccountID string   `json:"app_secret"`
-		AdAccountID       string   `json:"token"`
-		BusinessID        []string `json:"businessID"`
+		CampaignAccountID string            `json:"app_secret"`
+		AdAccountID       string            `json:"token"`
+		Business          []entity.Business `json:"business"`
 	}
 	var body Body
 	if err := rest.ParseBody(w, r, &body); err != nil {
@@ -42,7 +44,7 @@ func createCampaignHandler(w http.ResponseWriter, r *http.Request) {
 		UserID:     id,
 		AppSecret:  body.CampaignAccountID,
 		Token:      &body.AdAccountID,
-		BusinessID: body.BusinessID,
+		BusinessID: body.Business,
 	}
 
 	manager := core.NewUserCampaign()
@@ -109,3 +111,38 @@ func cloneCampaignHandler(w http.ResponseWriter, r *http.Request) {
 // 	manager := core.NewUserCampaign()
 // 	// err := manager.updateCampaign(ctx, data)
 // }
+
+func activeHandler(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	id := chi.URLParam(r, "id")
+	idint, err := strconv.ParseInt(id, 10, 10)
+	if err != nil {
+		rest.SendError(w, err)
+		return
+	}
+	manager := core.NewUserCampaign()
+	err = manager.Active(ctx, int(idint))
+	if err != nil {
+		rest.SendError(w, err)
+		return
+	}
+	rest.Send(w, http.StatusOK)
+
+}
+
+func listBusinessHandler(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	userId := chi.URLParam(r, "userId")
+	idint, err := strconv.ParseInt(userId, 10, 10)
+	if err != nil {
+		rest.SendError(w, err)
+		return
+	}
+	manager := core.NewUserCampaign()
+	ListBusiness, err := manager.ListBusinessId(ctx, int(idint))
+	if err != nil {
+		rest.SendError(w, err)
+		return
+	}
+	rest.Send(w, ListBusiness)
+}

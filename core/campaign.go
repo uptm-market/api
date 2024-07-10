@@ -105,3 +105,20 @@ func (c *UserCampaign) Get(ctx context.Context, campaign string) (*v16.Campaign,
 // func (c *UserCampaign) updateCampaign(ctx context.Context, data v16.Ad) {
 // 	err := fb.InitConfig().Ads.Update(ctx, da)
 // }
+
+func (c *UserCampaign) Active(ctx context.Context, id int) (err error) {
+	err = db.Active(ctx, id)
+	if err != nil {
+		return
+	}
+	return nil
+}
+
+func (c *UserCampaign) ListBusinessId(ctx context.Context, id int) (*entity.FacebookCampaignAdAccount, error) {
+	data, err := db.ReturnCampaign(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+
+	return data, nil
+}

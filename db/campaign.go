@@ -43,7 +43,7 @@ FROM facebook_campaign_ad_account
 WHERE user_id = $1;
 `
 	// Define the query to fetch the business IDs
-	queryBusiness := `SELECT business_id FROM facebook_campaign_ad_account WHERE user_id=$1`
+	queryBusiness := `SELECT business_id, name FROM facebook_campaign_ad_account WHERE user_id=$1`
 
 	// Initialize a variable to hold the main data
 	var data entity.FacebookCampaignAdAccount
@@ -62,9 +62,9 @@ WHERE user_id = $1;
 	defer rows.Close()
 
 	// Collect the business IDs into a slice
-	var strArray []string
+	var strArray []entity.Business
 	for rows.Next() {
-		var bid string
+		var bid entity.Business
 		if err := rows.Scan(&bid); err != nil {
 			return nil, err
 		}
@@ -78,4 +78,12 @@ WHERE user_id = $1;
 	data.BusinessID = strArray
 	log.Println("teste aqui")
 	return &data, nil
+}
+
+func Active(ctx context.Context, id int) (err error) {
+	_, err = infradb.Get().ExecContext(ctx, `UPDATE facebook_campaign_ad_account
+SET active = NOT active
+WHERE id = $1;
+`, id)
+	return err
 }

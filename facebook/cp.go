@@ -8,42 +8,75 @@ import (
 )
 
 func Cp(token string) map[string]interface{} {
-
 	// URL da API com a variável do token
 	url := fmt.Sprintf("https://graph.facebook.com/v20.0/me?fields=adaccounts{campaigns{id,name,status,account_id,budget_rebalance_flag,buying_type,created_time,lifetime_budget,issues_info,source_campaign,special_ad_category,special_ad_category_country,start_time,stop_time,daily_budget,budget_remaining}}&access_token=%s", token)
 
-	// Crie uma nova solicitação HTTP
-	req, err := http.NewRequest("GET", url, nil)
-	if err != nil {
-		fmt.Println("Erro ao criar a solicitação:", err)
-		return nil
+	// Função para fazer a solicitação e ler a resposta
+	fetchData := func(url string) (map[string]interface{}, error) {
+		req, err := http.NewRequest("GET", url, nil)
+		if err != nil {
+			return nil, fmt.Errorf("erro ao criar a solicitação: %v", err)
+		}
+
+		client := &http.Client{}
+		resp, err := client.Do(req)
+		if err != nil {
+			return nil, fmt.Errorf("erro ao enviar a solicitação: %v", err)
+		}
+		defer resp.Body.Close()
+
+		body, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			return nil, fmt.Errorf("erro ao ler a resposta: %v", err)
+		}
+
+		var result map[string]interface{}
+		err = json.Unmarshal(body, &result)
+		if err != nil {
+			return nil, fmt.Errorf("erro ao converter bytes para JSON: %v", err)
+		}
+
+		return result, nil
 	}
 
-	// Crie um cliente HTTP
-	client := &http.Client{}
-
-	// Envie a solicitação
-	resp, err := client.Do(req)
-	if err != nil {
-		fmt.Println("Erro ao enviar a solicitação:", err)
-		return nil
-	}
-	defer resp.Body.Close()
-
-	// Leia a resposta
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		fmt.Println("Erro ao ler a resposta:", err)
-		return nil
+	// Função para extrair o link de paginação "next"
+	getNextURL := func(result map[string]interface{}) (string, bool) {
+		if adAccounts, ok := result["adaccounts"].(map[string]interface{}); ok {
+			if paging, ok := adAccounts["paging"].(map[string]interface{}); ok {
+				if next, ok := paging["next"].(string); ok {
+					return next, true
+				}
+			}
+		}
+		return "", false
 	}
 
-	var result map[string]interface{}
-	err = json.Unmarshal(body, &result)
-	if err != nil {
-		fmt.Println("Erro ao converter bytes para JSON:", err)
-	} else {
-		fmt.Println("Resultado da conversão de bytes para JSON:", result)
+	// Variável para armazenar todos os resultados
+	allResults := make(map[string]interface{})
+	allResults["adaccounts"] = []interface{}{}
+
+	// Loop de paginação
+	for {
+		result, err := fetchData(url)
+		if err != nil {
+			fmt.Println(err)
+			return nil
+		}
+
+		// Adicione os dados da resposta atual aos resultados acumulados
+		if adAccounts, ok := result["adaccounts"].(map[string]interface{}); ok {
+			if data, ok := adAccounts["data"].([]interface{}); ok {
+				allResults["adaccounts"] = append(allResults["adaccounts"].([]interface{}), data...)
+			}
+		}
+
+		// Verifique se há mais páginas para buscar
+		nextURL, hasNext := getNextURL(result)
+		if !hasNext {
+			break
+		}
+		url = nextURL
 	}
-	// Retorne a resposta como string
-	return result
+
+	return allResults
 }

@@ -42,6 +42,8 @@ CREATE TABLE facebook_campaign_ad_account (
     id SERIAL PRIMARY KEY ,
     app_secret VARCHAR(255) ,
     business_id VARCHAR(255),
+    name VARCHAR(255),
+    active BOOLEAN default false, 
     user_id INT NOT NULL, 
     FOREIGN KEY (user_id) REFERENCES users(id)
 );

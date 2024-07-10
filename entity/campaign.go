@@ -3,14 +3,17 @@ package entity
 import v16 "github.com/justwatch/facebook-marketing-api-golang-sdk/marketing/v16"
 
 type FacebookCampaignAdAccount struct {
-	ID         int      `json:"id"`
-	AppSecret  string   `json:"app_secret"`
-	Token      *string  `json:"token"`
-	UserID     int      `json:"user_id"`
-	BusinessID []string `json:"business_id"`
-	Act        string   `json:"act"`
+	ID         int        `json:"id"`
+	AppSecret  string     `json:"app_secret"`
+	Token      *string    `json:"token"`
+	UserID     int        `json:"user_id"`
+	BusinessID []Business `json:"business_id"`
+	Act        string     `json:"act"`
 }
-
+type Business struct {
+	Name string `json:"name"`
+	ID   string `json:"id"`
+}
 type Campaign struct {
 	ID          string      `json:"id"`
 	Name        string      `json:"name"`
