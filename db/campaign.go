@@ -87,3 +87,26 @@ WHERE id = $1;
 `, id)
 	return err
 }
+
+func ListBusinessHandler(ctx context.Context, userId int) ([]entity.Business, error) {
+	queryBusiness := `SELECT business_id, name FROM facebook_campaign_ad_account WHERE user_id=$1`
+	rows, err := infradb.Get().QueryContext(ctx, queryBusiness, userId)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	// Collect the business IDs into a slice
+	var strArray []entity.Business
+	for rows.Next() {
+		var bid entity.Business
+		if err := rows.Scan(&bid.ID, &bid.Name); err != nil {
+			return nil, err
+		}
+		strArray = append(strArray, bid)
+	}
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+	return strArray, nil
+}

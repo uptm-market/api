@@ -122,3 +122,11 @@ func (c *UserCampaign) ListBusinessId(ctx context.Context, id int) (*entity.Face
 
 	return data, nil
 }
+
+func (c *UserCampaign) GetAllBusiness(ctx context.Context, id int) ([]entity.Business, error) {
+	data, err := db.ListBusinessHandler(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+	return data, nil
+}
