@@ -40,10 +40,10 @@ func ReturnCampaign(ctx context.Context, userId int) (*entity.FacebookCampaignAd
 	// Define the query to fetch the main data
 	queryMain := `SELECT MIN(id) AS min_id, MIN(app_secret) AS min_app_secret, MIN(user_id) AS min_user_id
 FROM facebook_campaign_ad_account
-WHERE user_id = $1 ;
+WHERE user_id = $1  and active =true ;
 `
 	// Define the query to fetch the business IDs
-	queryBusiness := `SELECT business_id, name FROM facebook_campaign_ad_account WHERE user_id=$1`
+	queryBusiness := `SELECT business_id, name FROM facebook_campaign_ad_account WHERE user_id=$1 and active =true`
 
 	// Initialize a variable to hold the main data
 	var data entity.FacebookCampaignAdAccount

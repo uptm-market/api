@@ -45,20 +45,18 @@ func InitConfig(ctx context.Context) (*v16.Service, error) {
 	return fbService, nil
 }
 
-// func Init(ctx context.Context, ID entity.FacebookCampaignAdAccount) []v16.Campaign {
+func Init(ctx context.Context, userId int) *v16.Service {
+	tk, err := db.ReturnTokenFacebook(ctx, uint(userId))
+	if err != nil {
+		rest.LogError(err, "Erro ao criar conexao com api do facebook, problema ao consultar db")
+		return nil
+	}
 
-// 	fbService, err := v16.New(nil, accessToken, appSecret)
-// 	if err != nil {
-// 		rest.LogError(err, "Erro ao criar conexao com api do facebook")
-// 		return nil
-// 	}
+	fbService, err := v16.New(nil, tk, appSecret)
+	if err != nil {
+		rest.LogError(err, "Erro ao criar conexao com api do facebook")
+		return nil
+	}
 
-// 	id := ID.Token
-
-// 	campaigns, err := fbService.Campaigns.List(id).Do(ctx)
-// 	if err != nil {
-// 		rest.LogError(err, "Erro ao retornar dados da campanha")
-// 		return nil
-// 	}
-// 	return campaigns
-// }
+	return fbService
+}

@@ -80,3 +80,18 @@ func Cp(token string) map[string]interface{} {
 
 	return allResults
 }
+
+func CpByBusinessID(token string, businessId string) map[string]interface{} {
+	business := businessId
+	accessToken := token
+	url := fmt.Sprintf("https://graph.facebook.com/v20.0/%s?field=owned_ad_accounts&access_token=%s", business, accessToken)
+
+	resp, err := http.Get(url)
+	if err != nil {
+		fmt.Println("Error:", err)
+		return nil
+	}
+	defer resp.Body.Close()
+
+	fmt.Println("Response status:", resp.Status)
+}
