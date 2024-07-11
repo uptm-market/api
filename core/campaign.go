@@ -119,7 +119,6 @@ func (c *UserCampaign) ListBusinessId(ctx context.Context, id int) (*entity.Face
 	if err != nil {
 		return nil, err
 	}
-
 	return data, nil
 }
 
@@ -129,4 +128,19 @@ func (c *UserCampaign) GetAllBusiness(ctx context.Context, id int) ([]entity.Bus
 		return nil, err
 	}
 	return data, nil
+}
+
+func (c *UserCampaign) ListAds(ctx context.Context, id uint) {
+	data, err := db.ReturnCampaign(ctx, int(id))
+	if err != nil {
+		return
+	}
+	tk, err := db.ReturnTokenFacebook(ctx, uint(id))
+	if err != nil {
+		rest.LogError(err, "Erro ao criar conexao com api do facebook, problema ao consultar db")
+		return
+	}
+	for _, a := range data.BusinessID {
+		fb.CpByBusinessID(tk, a.ID)
+	}
 }
