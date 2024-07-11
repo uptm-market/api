@@ -19,7 +19,7 @@ func CampaignRouter() http.Handler {
 	r.Post("/copy", middleware.AuthMiddleware(getIndexHandlerFunc(cloneCampaignHandler)))
 	r.Put("/active/{id}", middleware.AuthMiddleware(getIndexHandlerFunc(activeHandler)))
 	r.Get("/list/businessid/{userId}", middleware.AuthMiddleware(getIndexHandlerFunc(listBusinessHandler)))
-	r.Get("listAll/{userId}", middleware.AuthMiddleware(getIndexHandlerFunc(listBusinessAll)))
+	r.Get("/listAll/{userId}", middleware.AuthMiddleware(getIndexHandlerFunc(listBusinessAll)))
 	// r.Put("/", middleware.AuthMiddleware(getIndexHandlerFunc(updateCampaign)))
 
 	return r
