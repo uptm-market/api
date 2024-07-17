@@ -62,28 +62,20 @@ func createCampaignHandler(w http.ResponseWriter, r *http.Request) {
 func returnCampaignHandler(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	userId := r.URL.Query().Get("user_id")
-	cpID := r.URL.Query().Get("cp_id")
+	// cpID := r.URL.Query().Get("cp_id")
 	manager := core.NewUserCampaign()
-	if cpID == "" {
-		userIdInt, err := strconv.Atoi(userId)
-		if err != nil {
-			rest.SendError(w, err)
-			return
-		}
-		send := manager.ListAds(ctx, uint(userIdInt))
-		// if err != nil {
-		// 	rest.SendError(w, err)
-		// 	return
-		// }
-		rest.Send(w, send)
-	} else {
-		data, err := manager.Get(ctx, cpID)
-		if err != nil {
-			rest.SendError(w, err)
-			return
-		}
-		rest.Send(w, data)
+
+	userIdInt, err := strconv.Atoi(userId)
+	if err != nil {
+		rest.SendError(w, err)
+		return
 	}
+	send, err := manager.ListAds(ctx, uint(userIdInt))
+	if err != nil {
+		rest.SendError(w, err)
+		return
+	}
+	rest.Send(w, send)
 
 }
 

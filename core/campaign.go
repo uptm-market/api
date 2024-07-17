@@ -131,21 +131,19 @@ func (c *UserCampaign) GetAllBusiness(ctx context.Context, id int) ([]entity.Bus
 	return data, nil
 }
 
-func (c *UserCampaign) ListAds(ctx context.Context, id uint) []map[string]interface{} {
+func (c *UserCampaign) ListAds(ctx context.Context, id uint) ([]map[string]interface{}, error) {
 	data, err := db.ReturnCampaign(ctx, int(id))
 	if err != nil {
-		rest.LogError(err, "Erro ao criar conexao com api do facebook, problema ao consultar db")
-		return nil
+
+		return nil, rest.LogError(err, "Erro ao criar conexao com api do facebook, problema ao consultar db", db.ReturnCampaign)
 	}
 	tk, err := db.ReturnTokenFacebook(ctx, uint(id))
 	if err != nil {
-		rest.LogError(err, "Erro ao criar conexao com api do facebook, problema ao consultar db")
-		return nil
+		return nil, rest.LogError(err, "Erro ao criar conexao com api do facebook, problema ao consultar db", db.ReturnTokenFacebook)
 	}
 	var dataArray []string
 	for _, a := range data.BusinessID {
 		dataArray = fb.CpByBusinessID(tk, a.ID)
-
 	}
 	log.Println(tk)
 	log.Println(dataArray)
@@ -155,5 +153,5 @@ func (c *UserCampaign) ListAds(ctx context.Context, id uint) []map[string]interf
 		arrayStr = append(arrayStr, fbcp)
 	}
 
-	return arrayStr
+	return arrayStr, nil
 }
