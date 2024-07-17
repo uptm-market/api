@@ -38,9 +38,9 @@ func ReturnTokenFacebook(ctx context.Context, userId uint) (token string, err er
 }
 func ReturnCampaign(ctx context.Context, userId int) (*entity.FacebookCampaignAdAccount, error) {
 	// Define the query to fetch the main data
-	queryMain := `SELECT MIN(id) AS min_id, MIN(app_secret) AS min_app_secret, MIN(user_id) AS min_user_id
+	queryMain := `SELECT id AS min_id, app_secret AS min_app_secret, user_id AS min_user_id
 FROM facebook_campaign_ad_account
-WHERE user_id = $1  and active =true ;
+WHERE user_id = $1  and active = true ;
 `
 	// Define the query to fetch the business IDs
 	queryBusiness := `SELECT business_id, name FROM facebook_campaign_ad_account WHERE user_id=$1 and active =true`
@@ -80,10 +80,10 @@ WHERE user_id = $1  and active =true ;
 	return &data, nil
 }
 
-func Active(ctx context.Context, id int) (err error) {
+func Active(ctx context.Context, id string) (err error) {
 	_, err = infradb.Get().ExecContext(ctx, `UPDATE facebook_campaign_ad_account
 SET active = NOT active
-WHERE id = $1;
+WHERE business_id = $1;
 `, id)
 	return err
 }

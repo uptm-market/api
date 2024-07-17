@@ -116,13 +116,13 @@ func cloneCampaignHandler(w http.ResponseWriter, r *http.Request) {
 func activeHandler(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	id := chi.URLParam(r, "id")
-	idint, err := strconv.ParseInt(id, 10, 10)
-	if err != nil {
-		rest.SendError(w, err)
-		return
-	}
+	// idint, err := strconv.ParseInt(id, 10, 10)
+	// if err != nil {
+	// 	rest.SendError(w, err)
+	// 	return
+	// }
 	manager := core.NewUserCampaign()
-	err = manager.Active(ctx, int(idint))
+	err := manager.Active(ctx, id)
 	if err != nil {
 		rest.SendError(w, err)
 		return

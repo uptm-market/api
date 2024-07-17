@@ -106,7 +106,7 @@ func (c *UserCampaign) Get(ctx context.Context, campaign string) (*v16.Campaign,
 // 	err := fb.InitConfig().Ads.Update(ctx, da)
 // }
 
-func (c *UserCampaign) Active(ctx context.Context, id int) (err error) {
+func (c *UserCampaign) Active(ctx context.Context, id string) (err error) {
 	err = db.Active(ctx, id)
 	if err != nil {
 		return
