@@ -11,7 +11,7 @@ import (
 
 func Cp(token, act string) map[string]interface{} {
 	// URL da API com a variável do token
-	url := fmt.Sprintf("https://graph.facebook.com/v20.0/%s?fields=adaccounts{campaigns{id,name,status,account_id,budget_rebalance_flag,buying_type,created_time,lifetime_budget,start_time,stop_time,daily_budget,budget_remaining}}&access_token=%s", act, token)
+	url := fmt.Sprintf("https://graph.facebook.com/v20.0/%s?fields=ads{campaign,bid_amount,effective_status,creative,configured_status},amount_spent,business_city,min_daily_budget&access_token=%s", act, token)
 
 	// Função para fazer a solicitação e ler a resposta
 	fetchData := func(url string) (map[string]interface{}, error) {
