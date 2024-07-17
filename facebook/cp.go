@@ -108,7 +108,7 @@ func CpByBusinessID(token string, businessId string) []string {
 	}
 	var strarray []string
 	for _, e := range result.Data {
-		strarray = append(strarray, e.AccountID)
+		strarray = append(strarray, e.ID)
 	}
 
 	return strarray
