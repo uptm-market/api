@@ -142,9 +142,9 @@ func (c *UserCampaign) ListAds(ctx context.Context, id uint) []map[string]interf
 		return nil
 	}
 	var dataArray []entity.AdAccount
-	for i, a := range data.BusinessID {
-		data := fb.CpByBusinessID(tk, a.ID)
-		dataArray = append(dataArray, data.Data[i])
+	for _, a := range data.BusinessID {
+		dataA := fb.CpByBusinessID(tk, a.ID)
+		dataArray = append(dataArray, dataA.Data...)
 	}
 	var arrayStr []map[string]interface{}
 	for _, b := range dataArray {
