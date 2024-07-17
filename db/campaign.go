@@ -11,7 +11,7 @@ import (
 
 func CreateFacebookCampaign(ctx context.Context, data entity.FacebookCampaignAdAccount) error {
 	for _, business := range data.BusinessID {
-		_, err := infradb.Get().ExecContext(ctx, `INSERT INTO facebook_campaign_ad_account (app_secret, business_id,name, user_id) VALUES($1, $2, $3)`, data.AppSecret, business.ID, business.Name, data.UserID)
+		_, err := infradb.Get().ExecContext(ctx, `INSERT INTO facebook_campaign_ad_account (app_secret, business_id,name, user_id) VALUES($1, $2, $3,$4)`, data.AppSecret, business.ID, business.Name, data.UserID)
 		if err != nil {
 			return err
 		}
