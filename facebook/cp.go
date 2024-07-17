@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 
 	"go.mod/entity"
@@ -12,7 +13,7 @@ import (
 func Cp(token, act string) map[string]interface{} {
 	// URL da API com a variável do token
 	url := fmt.Sprintf("https://graph.facebook.com/v20.0/%s?fields=ads{campaign,bid_amount,effective_status,creative,configured_status},amount_spent,business_city,min_daily_budget&access_token=%s", act, token)
-
+	log.Println(url)
 	// Função para fazer a solicitação e ler a resposta
 	fetchData := func(url string) (map[string]interface{}, error) {
 		req, err := http.NewRequest("GET", url, nil)
@@ -37,7 +38,7 @@ func Cp(token, act string) map[string]interface{} {
 		if err != nil {
 			return nil, fmt.Errorf("erro ao converter bytes para JSON: %v", err)
 		}
-
+		log.Println(err)
 		return result, nil
 	}
 
