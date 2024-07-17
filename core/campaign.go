@@ -37,57 +37,57 @@ func (c *UserCampaign) CreateCampaignFull(ctx context.Context, data v16.Campaign
 	return nil
 }
 
-func (c *UserCampaign) List(ctx context.Context, userId int) (map[string]interface{}, error) {
-	// var array []string
-	// var arrayReturnCam *v16.CampaignListCall
-	// ar, err := db.ReturnCampaign(ctx, userId)
-	// if err != nil {
-	// 	return nil, rest.LogError(err, "ReturnCampaign")
-	// }
-	// log.Println("001")
-	// for _, a := range ar.BusinessID {
-	// 	log.Println("teste entrou", a)
-	// 	arrayReturnMain, err := fb.InitConfig(ctx)
-	// 	if err != nil {
-	// 		return nil, err
-	// 	}
-	// 	arrayReturn, err := arrayReturnMain.AdAccounts.List(ctx, a)
-	// 	if err != nil {
-	// 		return nil, &rest.Error{Status: 400, Code: "bad_request_fb_lib", Message: err.Error()}
-	// 	}
-	// 	log.Println("001 - meio")
-	// 	log.Println("teste abah", arrayReturn)
-	// 	log.Println("-------f--------")
-	// 	// Check if arrayReturn has enough elements before accessing index i
+// func (c *UserCampaign) List(ctx context.Context, userId int) (map[string]interface{}, error) {
+// 	// var array []string
+// 	// var arrayReturnCam *v16.CampaignListCall
+// 	// ar, err := db.ReturnCampaign(ctx, userId)
+// 	// if err != nil {
+// 	// 	return nil, rest.LogError(err, "ReturnCampaign")
+// 	// }
+// 	// log.Println("001")
+// 	// for _, a := range ar.BusinessID {
+// 	// 	log.Println("teste entrou", a)
+// 	// 	arrayReturnMain, err := fb.InitConfig(ctx)
+// 	// 	if err != nil {
+// 	// 		return nil, err
+// 	// 	}
+// 	// 	arrayReturn, err := arrayReturnMain.AdAccounts.List(ctx, a)
+// 	// 	if err != nil {
+// 	// 		return nil, &rest.Error{Status: 400, Code: "bad_request_fb_lib", Message: err.Error()}
+// 	// 	}
+// 	// 	log.Println("001 - meio")
+// 	// 	log.Println("teste abah", arrayReturn)
+// 	// 	log.Println("-------f--------")
+// 	// 	// Check if arrayReturn has enough elements before accessing index i
 
-	// 	for _, r := range arrayReturn {
-	// 		log.Println("001 - meio - loop - array")
-	// 		array = append(array, r.AccountID)
-	// 	}
+// 	// 	for _, r := range arrayReturn {
+// 	// 		log.Println("001 - meio - loop - array")
+// 	// 		array = append(array, r.AccountID)
+// 	// 	}
 
-	// }
+// 	// }
 
-	// log.Println("002")
+// 	// log.Println("002")
 
-	// log.Println(array)
-	// arrayReturnMain, err := fb.InitConfig(ctx)
-	// if err != nil {
-	// 	return nil, err
-	// }
-	// arrayReturnCam = arrayReturnMain.Campaigns.List("680041130165805")
-	// log.Println("002 - meio")
+// 	// log.Println(array)
+// 	// arrayReturnMain, err := fb.InitConfig(ctx)
+// 	// if err != nil {
+// 	// 	return nil, err
+// 	// }
+// 	// arrayReturnCam = arrayReturnMain.Campaigns.List("680041130165805")
+// 	// log.Println("002 - meio")
 
-	// log.Println("003")
+// 	// log.Println("003")
 
-	tk, err := db.ReturnTokenFacebook(ctx, uint(userId))
-	if err != nil {
-		rest.LogError(err, "Erro ao criar conexao com api do facebook, problema ao consultar db")
-		return nil, err
-	}
-	st := fb.Cp(tk)
-	return st, nil
+// 	tk, err := db.ReturnTokenFacebook(ctx, uint(userId))
+// 	if err != nil {
+// 		rest.LogError(err, "Erro ao criar conexao com api do facebook, problema ao consultar db")
+// 		return nil, err
+// 	}
+// 	st := fb.Cp(tk)
+// 	return st, nil
 
-}
+// }
 
 func (c *UserCampaign) Get(ctx context.Context, campaign string) (*v16.Campaign, error) {
 	arrayReturnMain, err := fb.InitConfig(ctx)
@@ -130,17 +130,27 @@ func (c *UserCampaign) GetAllBusiness(ctx context.Context, id int) ([]entity.Bus
 	return data, nil
 }
 
-func (c *UserCampaign) ListAds(ctx context.Context, id uint) {
+func (c *UserCampaign) ListAds(ctx context.Context, id uint) []map[string]interface{} {
 	data, err := db.ReturnCampaign(ctx, int(id))
 	if err != nil {
-		return
+		rest.LogError(err, "Erro ao criar conexao com api do facebook, problema ao consultar db")
+		return nil
 	}
 	tk, err := db.ReturnTokenFacebook(ctx, uint(id))
 	if err != nil {
 		rest.LogError(err, "Erro ao criar conexao com api do facebook, problema ao consultar db")
-		return
+		return nil
 	}
+	var dataArray []entity.OwnedAdAccounts
 	for _, a := range data.BusinessID {
-		fb.CpByBusinessID(tk, a.ID)
+		data := fb.CpByBusinessID(tk, a.ID)
+		dataArray = append(dataArray, *data)
 	}
+	var arrayStr []map[string]interface{}
+	for i, b := range dataArray {
+		fbcp := fb.Cp(tk, b.Data[i].AccountID)
+		arrayStr = append(arrayStr, fbcp)
+	}
+
+	return arrayStr
 }

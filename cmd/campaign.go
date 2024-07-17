@@ -70,11 +70,11 @@ func returnCampaignHandler(w http.ResponseWriter, r *http.Request) {
 			rest.SendError(w, err)
 			return
 		}
-		send, err := manager.List(ctx, userIdInt)
-		if err != nil {
-			rest.SendError(w, err)
-			return
-		}
+		send := manager.ListAds(ctx, uint(userIdInt))
+		// if err != nil {
+		// 	rest.SendError(w, err)
+		// 	return
+		// }
 		rest.Send(w, send)
 	} else {
 		data, err := manager.Get(ctx, cpID)

@@ -5,11 +5,13 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+
+	"go.mod/entity"
 )
 
-func Cp(token string) map[string]interface{} {
+func Cp(token, act string) map[string]interface{} {
 	// URL da API com a variável do token
-	url := fmt.Sprintf("https://graph.facebook.com/v20.0/me?fields=adaccounts{campaigns{id,name,status,account_id,budget_rebalance_flag,buying_type,created_time,lifetime_budget,issues_info,source_campaign,special_ad_category,special_ad_category_country,start_time,stop_time,daily_budget,budget_remaining}}&access_token=%s", token)
+	url := fmt.Sprintf("https://graph.facebook.com/v20.0/%s?fields=adaccounts{campaigns{id,name,status,account_id,budget_rebalance_flag,buying_type,created_time,lifetime_budget,issues_info,source_campaign,special_ad_category,special_ad_category_country,start_time,stop_time,daily_budget,budget_remaining}}&access_token=%s", act, token)
 
 	// Função para fazer a solicitação e ler a resposta
 	fetchData := func(url string) (map[string]interface{}, error) {
@@ -81,7 +83,7 @@ func Cp(token string) map[string]interface{} {
 	return allResults
 }
 
-func CpByBusinessID(token string, businessId string) map[string]interface{} {
+func CpByBusinessID(token string, businessId string) *entity.OwnedAdAccounts {
 	business := businessId
 	accessToken := token
 	url := fmt.Sprintf("https://graph.facebook.com/v20.0/%s?fields=owned_ad_accounts&access_token=%s", business, accessToken)
@@ -98,7 +100,7 @@ func CpByBusinessID(token string, businessId string) map[string]interface{} {
 		return nil
 	}
 
-	var result map[string]interface{}
+	var result *entity.OwnedAdAccounts
 	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
 		fmt.Println("Error decoding response:", err)
 		return nil
