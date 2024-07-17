@@ -2,6 +2,7 @@ package core
 
 import (
 	"context"
+	"log"
 
 	v16 "github.com/justwatch/facebook-marketing-api-golang-sdk/marketing/v16"
 	"go.mod/db"
@@ -146,6 +147,8 @@ func (c *UserCampaign) ListAds(ctx context.Context, id uint) []map[string]interf
 		dataArray = fb.CpByBusinessID(tk, a.ID)
 
 	}
+	log.Println(tk)
+	log.Println(dataArray)
 	var arrayStr []map[string]interface{}
 	for _, b := range dataArray {
 		fbcp := fb.Cp(tk, b)
