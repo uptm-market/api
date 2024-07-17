@@ -141,14 +141,14 @@ func (c *UserCampaign) ListAds(ctx context.Context, id uint) []map[string]interf
 		rest.LogError(err, "Erro ao criar conexao com api do facebook, problema ao consultar db")
 		return nil
 	}
-	var dataArray []entity.AdAccount
+	var dataArray []string
 	for _, a := range data.BusinessID {
-		dataA := fb.CpByBusinessID(tk, a.ID)
-		dataArray = append(dataArray, dataA.Data...)
+		dataArray = fb.CpByBusinessID(tk, a.ID)
+
 	}
 	var arrayStr []map[string]interface{}
 	for _, b := range dataArray {
-		fbcp := fb.Cp(tk, b.AccountID)
+		fbcp := fb.Cp(tk, b)
 		arrayStr = append(arrayStr, fbcp)
 	}
 

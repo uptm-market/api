@@ -84,7 +84,7 @@ func Cp(token, act string) map[string]interface{} {
 	return allResults
 }
 
-func CpByBusinessID(token string, businessId string) *entity.OwnedAdAccounts {
+func CpByBusinessID(token string, businessId string) []string {
 	business := businessId
 	accessToken := token
 	url := fmt.Sprintf("https://graph.facebook.com/v20.0/%s?fields=owned_ad_accounts&access_token=%s", business, accessToken)
@@ -106,6 +106,10 @@ func CpByBusinessID(token string, businessId string) *entity.OwnedAdAccounts {
 		fmt.Println("Error decoding response:", err)
 		return nil
 	}
+	var strarray []string
+	for _, e := range result.Data {
+		strarray = append(strarray, e.AccountID)
+	}
 
-	return result
+	return strarray
 }
