@@ -39,13 +39,26 @@ type CampaignReturnCount struct {
 	Campaign []v16.Campaign `json:"campaign"`
 }
 
-// AdAccount representa uma única conta de anúncio
 type AdAccount struct {
 	AccountID string `json:"account_id"`
 	ID        string `json:"id"`
 }
 
-// OwnedAdAccounts representa a resposta da API para contas de anúncios possuídas
+type Cursors struct {
+	Before string `json:"before"`
+	After  string `json:"after"`
+}
+
+type Paging struct {
+	Cursors Cursors `json:"cursors"`
+}
+
 type OwnedAdAccounts struct {
-	Data []AdAccount `json:"data"`
+	Data   []AdAccount `json:"data"`
+	Paging Paging      `json:"paging"`
+}
+
+type Response struct {
+	OwnedAdAccounts OwnedAdAccounts `json:"owned_ad_accounts"`
+	ID              string          `json:"id"`
 }

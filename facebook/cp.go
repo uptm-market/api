@@ -3,113 +3,117 @@ package fb
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
-
-	"go.mod/entity"
 )
 
 func Cp(token, act string) map[string]interface{} {
 	// URL da API com a variável do token
+	token = "EAAfXJXDJoCkBO9kJHIyIS10LNKLqvtxLVZAKYMKJNZCKuLizltSpEf8Jf1glZBJfxlHyqEbAa2tPZAWIpymoRlfEDltgFaCZCxKLCij8LfBjD9XcZAUZAOzZAblnXViLgLQwdt0ysB796erMXUEdC9ABOEhUyauQvsrUtZB4vzZBNVkAhGeOQyjiZCqAzCknqo0vVtXsDpeh1PuTFrw6ZBSVYEQ1qAwqwMuyKX3ZBkksZD"
 	url := fmt.Sprintf("https://graph.facebook.com/v20.0/%s?fields=ads{campaign,bid_amount,effective_status,creative,configured_status},amount_spent,business_city,min_daily_budget&access_token=%s", act, token)
 	log.Println(url)
 	// Função para fazer a solicitação e ler a resposta
-	fetchData := func(url string) (map[string]interface{}, error) {
-		req, err := http.NewRequest("GET", url, nil)
-		if err != nil {
-			return nil, fmt.Errorf("erro ao criar a solicitação: %v", err)
-		}
 
-		client := &http.Client{}
-		resp, err := client.Do(req)
-		if err != nil {
-			return nil, fmt.Errorf("erro ao enviar a solicitação: %v", err)
-		}
-		defer resp.Body.Close()
-
-		body, err := ioutil.ReadAll(resp.Body)
-		if err != nil {
-			return nil, fmt.Errorf("erro ao ler a resposta: %v", err)
-		}
-
-		var result map[string]interface{}
-		err = json.Unmarshal(body, &result)
-		if err != nil {
-			return nil, fmt.Errorf("erro ao converter bytes para JSON: %v", err)
-		}
-		log.Println(err)
-		return result, nil
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		fmt.Errorf("erro ao criar a solicitação: %v", err)
+		return nil
 	}
 
-	// Função para extrair o link de paginação "next"
-	getNextURL := func(result map[string]interface{}) (string, bool) {
-		if adAccounts, ok := result["adaccounts"].(map[string]interface{}); ok {
-			if paging, ok := adAccounts["paging"].(map[string]interface{}); ok {
-				if next, ok := paging["next"].(string); ok {
-					return next, true
-				}
-			}
-		}
-		return "", false
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		fmt.Errorf("erro ao criar a solicitação: %v", err)
+		return nil
 	}
 
-	// Variável para armazenar todos os resultados
-	allResults := make(map[string]interface{})
-	allResults["adaccounts"] = []interface{}{}
+	// defer resp.Body.Close()
 
-	// Loop de paginação
-	for {
-		result, err := fetchData(url)
-		if err != nil {
-			fmt.Println(err)
-			return nil
-		}
-
-		// Adicione os dados da resposta atual aos resultados acumulados
-		if adAccounts, ok := result["adaccounts"].(map[string]interface{}); ok {
-			if data, ok := adAccounts["data"].([]interface{}); ok {
-				allResults["adaccounts"] = append(allResults["adaccounts"].([]interface{}), data...)
-			}
-		}
-
-		// Verifique se há mais páginas para buscar
-		nextURL, hasNext := getNextURL(result)
-		if !hasNext {
-			break
-		}
-		url = nextURL
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Errorf("erro ao ler a resposta: %v", err)
+		return nil
 	}
 
-	return allResults
+	var result map[string]interface{}
+	err = json.Unmarshal(body, &result)
+	if err != nil {
+		fmt.Errorf("erro ao converter bytes para JSON: %v", err)
+		return nil
+	}
+
+	return result
+
 }
 
-func CpByBusinessID(token string, businessId string) []string {
-	business := businessId
-	accessToken := token
-	url := fmt.Sprintf("https://graph.facebook.com/v20.0/%s?fields=owned_ad_accounts&access_token=%s", business, accessToken)
+type AdAccount struct {
+	AccountID string `json:"account_id"`
+	ID        string `json:"id"`
+}
 
-	resp, err := http.Get(url)
+type Cursors struct {
+	Before string `json:"before"`
+	After  string `json:"after"`
+}
+
+type Paging struct {
+	Cursors Cursors `json:"cursors"`
+}
+
+type OwnedAdAccounts struct {
+	Data   []AdAccount `json:"data"`
+	Paging Paging      `json:"paging"`
+}
+
+type Response struct {
+	OwnedAdAccounts OwnedAdAccounts `json:"owned_ad_accounts"`
+	ID              string          `json:"id"`
+}
+
+func CpByBusinessID(token string, businessID string) []string {
+	token = "EAAfXJXDJoCkBO9kJHIyIS10LNKLqvtxLVZAKYMKJNZCKuLizltSpEf8Jf1glZBJfxlHyqEbAa2tPZAWIpymoRlfEDltgFaCZCxKLCij8LfBjD9XcZAUZAOzZAblnXViLgLQwdt0ysB796erMXUEdC9ABOEhUyauQvsrUtZB4vzZBNVkAhGeOQyjiZCqAzCknqo0vVtXsDpeh1PuTFrw6ZBSVYEQ1qAwqwMuyKX3ZBkksZD"
+	businessID = "7042491049135964"
+	url := fmt.Sprintf("https://graph.facebook.com/v20.0/%s?fields=owned_ad_accounts&access_token=%s", businessID, token)
+	fmt.Println("URL:", url)
+
+	client := &http.Client{}
+	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
-		fmt.Println("Error:", err)
+		log.Println("Erro ao criar solicitação:", err)
+		return nil
+	}
+
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Println("Erro ao fazer solicitação:", err)
 		return nil
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		fmt.Println("Error: received non-200 response status", resp.Status)
+		log.Println("Erro: Recebido status diferente de 200 OK:", resp.Status)
 		return nil
 	}
 
-	var result *entity.OwnedAdAccounts
-	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
-		fmt.Println("Error decoding response:", err)
+	bodyBytes, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Println("Erro ao ler o corpo da resposta:", err)
 		return nil
 	}
+
+	var response Response
+	err = json.Unmarshal(bodyBytes, &response)
+	if err != nil {
+		log.Println("Erro ao decodificar JSON:", err)
+		return nil
+	}
+	log.Println(response)
 	var strarray []string
-	for _, e := range result.Data {
-		strarray = append(strarray, e.ID)
+	for _, account := range response.OwnedAdAccounts.Data {
+		strarray = append(strarray, account.ID)
 	}
-
+	log.Println(strarray)
 	return strarray
 }

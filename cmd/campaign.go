@@ -14,7 +14,7 @@ import (
 
 func CampaignRouter() http.Handler {
 	r := chi.NewRouter()
-	r.Get("/", middleware.AuthMiddleware(getIndexHandlerFunc(returnCampaignHandler)))
+	r.Get("/", returnCampaignHandler)
 	r.Post("/", middleware.AuthMiddleware(getIndexHandlerFunc(createCampaignHandler)))
 	r.Post("/copy", middleware.AuthMiddleware(getIndexHandlerFunc(cloneCampaignHandler)))
 	r.Put("/active/{id}", middleware.AuthMiddleware(getIndexHandlerFunc(activeHandler)))
