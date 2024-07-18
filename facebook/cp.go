@@ -11,7 +11,7 @@ import (
 
 func Cp(token, act string) map[string]interface{} {
 	// URL da API com a variável do token
-	token = "EAAfXJXDJoCkBO9kJHIyIS10LNKLqvtxLVZAKYMKJNZCKuLizltSpEf8Jf1glZBJfxlHyqEbAa2tPZAWIpymoRlfEDltgFaCZCxKLCij8LfBjD9XcZAUZAOzZAblnXViLgLQwdt0ysB796erMXUEdC9ABOEhUyauQvsrUtZB4vzZBNVkAhGeOQyjiZCqAzCknqo0vVtXsDpeh1PuTFrw6ZBSVYEQ1qAwqwMuyKX3ZBkksZD"
+	// token = "EAAfXJXDJoCkBO9kJHIyIS10LNKLqvtxLVZAKYMKJNZCKuLizltSpEf8Jf1glZBJfxlHyqEbAa2tPZAWIpymoRlfEDltgFaCZCxKLCij8LfBjD9XcZAUZAOzZAblnXViLgLQwdt0ysB796erMXUEdC9ABOEhUyauQvsrUtZB4vzZBNVkAhGeOQyjiZCqAzCknqo0vVtXsDpeh1PuTFrw6ZBSVYEQ1qAwqwMuyKX3ZBkksZD"
 	url := fmt.Sprintf("https://graph.facebook.com/v20.0/%s?fields=ads{campaign,bid_amount,effective_status,creative,configured_status},amount_spent,business_city,min_daily_budget&access_token=%s", act, token)
 	log.Println(url)
 	// Função para fazer a solicitação e ler a resposta
@@ -73,8 +73,8 @@ type Response struct {
 }
 
 func CpByBusinessID(token string, businessID string) []string {
-	token = "EAAfXJXDJoCkBO9kJHIyIS10LNKLqvtxLVZAKYMKJNZCKuLizltSpEf8Jf1glZBJfxlHyqEbAa2tPZAWIpymoRlfEDltgFaCZCxKLCij8LfBjD9XcZAUZAOzZAblnXViLgLQwdt0ysB796erMXUEdC9ABOEhUyauQvsrUtZB4vzZBNVkAhGeOQyjiZCqAzCknqo0vVtXsDpeh1PuTFrw6ZBSVYEQ1qAwqwMuyKX3ZBkksZD"
-	businessID = "7042491049135964"
+	// token = "EAAfXJXDJoCkBO9kJHIyIS10LNKLqvtxLVZAKYMKJNZCKuLizltSpEf8Jf1glZBJfxlHyqEbAa2tPZAWIpymoRlfEDltgFaCZCxKLCij8LfBjD9XcZAUZAOzZAblnXViLgLQwdt0ysB796erMXUEdC9ABOEhUyauQvsrUtZB4vzZBNVkAhGeOQyjiZCqAzCknqo0vVtXsDpeh1PuTFrw6ZBSVYEQ1qAwqwMuyKX3ZBkksZD"
+	// businessID = "7042491049135964"
 	url := fmt.Sprintf("https://graph.facebook.com/v20.0/%s?fields=owned_ad_accounts&access_token=%s", businessID, token)
 	fmt.Println("URL:", url)
 

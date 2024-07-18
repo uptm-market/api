@@ -2,6 +2,7 @@ package core
 
 import (
 	"context"
+	"log"
 
 	v16 "github.com/justwatch/facebook-marketing-api-golang-sdk/marketing/v16"
 	"go.mod/db"
@@ -131,27 +132,26 @@ func (c *UserCampaign) GetAllBusiness(ctx context.Context, id int) ([]entity.Bus
 }
 
 func (c *UserCampaign) ListAds(ctx context.Context, id uint) ([]map[string]interface{}, error) {
-	// _, err := db.ReturnCampaign(ctx, int(id))
-	// if err != nil {
+	data, err := db.ReturnCampaign(ctx, int(id))
+	if err != nil {
 
-	// 	return nil, rest.LogError(err, "Erro ao criar conexao com api do facebook, problema ao consultar db", db.ReturnCampaign)
-	// }
-	// tk, err := db.ReturnTokenFacebook(ctx, uint(id))
-	// if err != nil {
-	// 	return nil, rest.LogError(err, "Erro ao criar conexao com api do facebook, problema ao consultar db", db.ReturnTokenFacebook)
-	// }
-	// var dataArray []string
-
-	dataArray := fb.CpByBusinessID("tk", "")
-
-	// log.Println(tk)
-	// log.Println(dataArray)
+		return nil, rest.LogError(err, "Erro ao criar conexao com api do facebook, problema ao consultar db", db.ReturnCampaign)
+	}
+	tk, err := db.ReturnTokenFacebook(ctx, uint(id))
+	if err != nil {
+		return nil, rest.LogError(err, "Erro ao criar conexao com api do facebook, problema ao consultar db", db.ReturnTokenFacebook)
+	}
+	var dataArray []string
+	for _, a := range data.BusinessID {
+		dataArray = fb.CpByBusinessID(tk, a.ID)
+	}
+	log.Println(tk)
+	log.Println(dataArray)
 	var arrayStr []map[string]interface{}
 	for _, b := range dataArray {
-		fbcp := fb.Cp("tk", b)
+		fbcp := fb.Cp(tk, b)
 		arrayStr = append(arrayStr, fbcp)
 	}
 
-	// log.Println(arrayStr)
 	return arrayStr, nil
 }
