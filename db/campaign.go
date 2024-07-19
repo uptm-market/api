@@ -43,7 +43,7 @@ FROM facebook_campaign_ad_account
 WHERE user_id = $1  and active = true ;
 `
 	// Define the query to fetch the business IDs
-	queryBusiness := `SELECT business_id, name FROM facebook_campaign_ad_account WHERE user_id=$1 and active =true`
+	queryBusiness := `SELECT business_id, name, active FROM facebook_campaign_ad_account WHERE user_id=$1 and active =true`
 
 	// Initialize a variable to hold the main data
 	var data entity.FacebookCampaignAdAccount
@@ -65,7 +65,7 @@ WHERE user_id = $1  and active = true ;
 	var strArray []entity.Business
 	for rows.Next() {
 		var bid entity.Business
-		if err := rows.Scan(&bid.ID, &bid.Name); err != nil {
+		if err := rows.Scan(&bid.ID, &bid.Name, &bid.Active); err != nil {
 			return nil, err
 		}
 		strArray = append(strArray, bid)

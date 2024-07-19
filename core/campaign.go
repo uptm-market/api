@@ -2,6 +2,7 @@ package core
 
 import (
 	"context"
+	"database/sql"
 	"log"
 
 	v16 "github.com/justwatch/facebook-marketing-api-golang-sdk/marketing/v16"
@@ -28,10 +29,16 @@ func (c *UserCampaign) Create(ctx context.Context, body entity.FacebookCampaignA
 func (c *UserCampaign) CreateCampaignFull(ctx context.Context, data v16.Campaign) error {
 	arrayReturnMain, err := fb.InitConfig(ctx)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil
+		}
 		return err
 	}
 	_, err = arrayReturnMain.Campaigns.Create(ctx, data)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil
+		}
 		return rest.LogError(err, "c.UserCampaign.CreateCampaignfull fb.Create")
 	}
 
@@ -97,6 +104,9 @@ func (c *UserCampaign) Get(ctx context.Context, campaign string) (*v16.Campaign,
 	}
 	data, err := arrayReturnMain.Campaigns.Get(ctx, campaign)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil
+		}
 		return nil, &rest.Error{Status: 400, Code: "bad_request_fb_lib", Message: err.Error()}
 	}
 
@@ -110,6 +120,7 @@ func (c *UserCampaign) Get(ctx context.Context, campaign string) (*v16.Campaign,
 func (c *UserCampaign) Active(ctx context.Context, id string) (err error) {
 	err = db.Active(ctx, id)
 	if err != nil {
+
 		return
 	}
 	return nil
@@ -118,6 +129,9 @@ func (c *UserCampaign) Active(ctx context.Context, id string) (err error) {
 func (c *UserCampaign) ListBusinessId(ctx context.Context, id int) (*entity.FacebookCampaignAdAccount, error) {
 	data, err := db.ReturnCampaign(ctx, id)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil
+		}
 		return nil, err
 	}
 	return data, nil
@@ -134,11 +148,16 @@ func (c *UserCampaign) GetAllBusiness(ctx context.Context, id int) ([]entity.Bus
 func (c *UserCampaign) ListAds(ctx context.Context, id uint) ([]map[string]interface{}, error) {
 	data, err := db.ReturnCampaign(ctx, int(id))
 	if err != nil {
-
+		if err == sql.ErrNoRows {
+			return nil, nil
+		}
 		return nil, rest.LogError(err, "Erro ao criar conexao com api do facebook, problema ao consultar db", db.ReturnCampaign)
 	}
 	tk, err := db.ReturnTokenFacebook(ctx, uint(id))
 	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil
+		}
 		return nil, rest.LogError(err, "Erro ao criar conexao com api do facebook, problema ao consultar db", db.ReturnTokenFacebook)
 	}
 	var dataArray []string

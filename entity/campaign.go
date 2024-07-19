@@ -11,8 +11,9 @@ type FacebookCampaignAdAccount struct {
 	Act        string     `json:"act"`
 }
 type Business struct {
-	Name string `json:"name"`
-	ID   string `json:"id"`
+	Name   string `json:"name"`
+	Active bool   `json:"active"`
+	ID     string `json:"id"`
 }
 type Campaign struct {
 	ID          string      `json:"id"`
