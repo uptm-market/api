@@ -89,7 +89,7 @@ WHERE business_id = $1;
 }
 
 func ListBusinessHandler(ctx context.Context, userId int) ([]entity.Business, error) {
-	queryBusiness := `SELECT business_id, name FROM facebook_campaign_ad_account WHERE user_id=$1`
+	queryBusiness := `SELECT business_id, name, active FROM facebook_campaign_ad_account WHERE user_id=$1`
 	rows, err := infradb.Get().QueryContext(ctx, queryBusiness, userId)
 	if err != nil {
 		return nil, err
@@ -100,7 +100,7 @@ func ListBusinessHandler(ctx context.Context, userId int) ([]entity.Business, er
 	var strArray []entity.Business
 	for rows.Next() {
 		var bid entity.Business
-		if err := rows.Scan(&bid.ID, &bid.Name); err != nil {
+		if err := rows.Scan(&bid.ID, &bid.Name, &bid.Active); err != nil {
 			return nil, err
 		}
 		strArray = append(strArray, bid)
