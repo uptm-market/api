@@ -38,10 +38,15 @@ func main() {
 	r.Mount("/user", UserRouter())
 	r.Mount("/campaign", CampaignRouter())
 
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "9999"
-	}
+	port := envPortOr("8080")
 	fmt.Println(":", port)
 	log.Fatal(http.ListenAndServe(":"+port, r))
+}
+
+func envPortOr(port string) string {
+	if envPort := os.Getenv("PORT"); envPort != "" {
+		fmt.Println(envPort)
+		return ":" + envPort
+	}
+	return ":" + port
 }
