@@ -40,7 +40,7 @@ func main() {
 
 	port := envPortOr("8080")
 	fmt.Println(":", port)
-	log.Fatal(http.ListenAndServe(":"+port, r))
+	log.Fatal(http.ListenAndServe(port, r))
 }
 
 func envPortOr(port string) string {
