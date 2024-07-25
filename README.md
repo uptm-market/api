@@ -1,10 +1,19 @@
 # api
 
+## ROTA PRD
+
+```bash
+
+https://api-production-4147.up.railway.app/
+
+```
+
 
 ## Instalar
 
 - GOLANG
 - DOCKER
+
 
 ## só de rodar a api já sobe o banco de dados
 ```bash
