@@ -1,7 +1,7 @@
 FROM golang:1.20-alpine AS build
 
 # Install Git
-RUN apk update && apk add --no-cache git
+# RUN apk update && apk add --no-cache git
 
 # Create working directory in the image
 WORKDIR /app
