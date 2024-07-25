@@ -4,8 +4,8 @@ FROM golang:1.20-alpine AS build
 WORKDIR /app
 
 # Copy dependency files
-COPY go.mod .
-COPY go.sum .
+# COPY go.mod .
+# COPY go.sum .
 
 # Install dependencies
 RUN go mod tidy 
