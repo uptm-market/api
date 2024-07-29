@@ -5,7 +5,6 @@ import (
 	"strconv"
 
 	"github.com/go-chi/chi"
-	v16 "github.com/justwatch/facebook-marketing-api-golang-sdk/marketing/v16"
 	"go.mod/core"
 	"go.mod/entity"
 	"go.mod/middleware"
@@ -16,7 +15,7 @@ func CampaignRouter() http.Handler {
 	r := chi.NewRouter()
 	r.Get("/", returnCampaignHandler)
 	r.Post("/", middleware.AuthMiddleware(getIndexHandlerFunc(createCampaignHandler)))
-	r.Post("/copy", middleware.AuthMiddleware(getIndexHandlerFunc(cloneCampaignHandler)))
+	r.Post("/{act}/{userId}/copy", middleware.AuthMiddleware(getIndexHandlerFunc(cloneCampaignHandler)))
 	r.Put("/active/{id}", middleware.AuthMiddleware(getIndexHandlerFunc(activeHandler)))
 	r.Get("/list/businessid/{userId}", middleware.AuthMiddleware(getIndexHandlerFunc(listBusinessHandler)))
 	r.Get("/listAll/{userId}", middleware.AuthMiddleware(getIndexHandlerFunc(listBusinessAll)))
@@ -81,13 +80,20 @@ func returnCampaignHandler(w http.ResponseWriter, r *http.Request) {
 
 func cloneCampaignHandler(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-	var data v16.Campaign
+	var data entity.CampaignClone
 	if err := rest.ParseBody(w, r, &data); err != nil {
 		rest.SendError(w, err)
 		return
 	}
+	act := chi.URLParam(r, "act")
+	userId := chi.URLParam(r, "userId")
+	uintId, err := strconv.ParseUint(userId, 10, 16)
+	if err != nil {
+		rest.SendError(w, err)
+		return
+	}
 	manager := core.NewUserCampaign()
-	err := manager.CreateCampaignFull(ctx, data)
+	err = manager.CloneFB(ctx, uint(uintId), act, data)
 	if err != nil {
 		rest.SendError(w, err)
 		return

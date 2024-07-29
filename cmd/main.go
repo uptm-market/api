@@ -38,9 +38,9 @@ func main() {
 	r.Mount("/user", UserRouter())
 	r.Mount("/campaign", CampaignRouter())
 
-	port := envPortOr("8080")
-	fmt.Println(":", port)
-	log.Fatal(http.ListenAndServe(port, r))
+	// port := envPortOr("8080")
+	// fmt.Println(":", port)
+	log.Fatal(http.ListenAndServe(":9999", r))
 }
 
 func envPortOr(port string) string {
