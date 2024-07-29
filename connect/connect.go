@@ -88,7 +88,7 @@ func Get() *sql.DB {
 	defer dbMu.Unlock()
 	if DB == nil {
 		var err error
-		DB, err = newDB("postgresql://user:password@postgres:5451/database")
+		DB, err = newDB("postgresql://user:password@postgres:5432/database?sslmode=disable")
 		if err != nil {
 			log.Fatalln("get db:", err.Error())
 		}

@@ -24,7 +24,7 @@ func main() {
 
 	r := chi.NewRouter()
 	m := chiprometheus.NewMiddleware("router")
-	infradb.DSN = "postgresql://user:password@postgres:5451/database"
+	infradb.DSN = "postgresql://user:password@postgres:5432/database?sslmode=disable"
 
 	r.Use(m)
 	corsOptions := cors.New(cors.Options{
