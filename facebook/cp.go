@@ -1,12 +1,15 @@
 package fb
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
+
+	"go.mod/entity"
 )
 
 func Cp(token, act string) map[string]interface{} {
@@ -116,4 +119,38 @@ func CpByBusinessID(token string, businessID string) []string {
 	}
 	log.Println(strarray)
 	return strarray
+}
+
+func Copy(token, act string, body entity.CampaignClone) error {
+	url := fmt.Sprintf("https://graph.facebook.com/v20.0/%s/campaigns?access_token=%s", act, token)
+
+	// Converte o corpo da solicitação para JSON
+	jsonBody, err := json.Marshal(body)
+	if err != nil {
+		return fmt.Errorf("failed to marshal JSON: %w", err)
+	}
+
+	// Cria uma nova solicitação POST
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonBody))
+	if err != nil {
+		return fmt.Errorf("failed to create new request: %w", err)
+	}
+
+	// Define os cabeçalhos apropriados
+	req.Header.Set("Content-Type", "application/json")
+
+	// Cria um cliente HTTP e envia a solicitação
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return fmt.Errorf("failed to send request: %w", err)
+	}
+	defer resp.Body.Close()
+
+	// Verifica o código de status da resposta
+	if resp.StatusCode != http.StatusOK {
+		return fmt.Errorf("unexpected status code: %d", resp.StatusCode)
+	}
+
+	return nil
 }

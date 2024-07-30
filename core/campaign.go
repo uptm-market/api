@@ -45,6 +45,21 @@ func (c *UserCampaign) CreateCampaignFull(ctx context.Context, data v16.Campaign
 	return nil
 }
 
+func (c *UserCampaign) CloneFB(ctx context.Context, userId uint, act string, body entity.CampaignClone) error {
+	tk, err := db.ReturnTokenFacebook(ctx, userId)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil
+		}
+		return rest.LogError(err, "Erro ao criar conexao com api do facebook, problema ao consultar db", db.ReturnTokenFacebook)
+	}
+	err = fb.Copy(tk, act, body)
+	if err != nil {
+		return rest.LogError(err, "Erro ao criar conexao com api do facebook, problema ao consultar db Copy", db.ReturnTokenFacebook)
+	}
+	return nil
+}
+
 // func (c *UserCampaign) List(ctx context.Context, userId int) (map[string]interface{}, error) {
 // 	// var array []string
 // 	// var arrayReturnCam *v16.CampaignListCall

@@ -266,3 +266,64 @@ sudo docker-compose up --build
 
 ```
 
+
+
+
+## CLONAR CAMPANHA
+
+
+
+```BASH
+/campaign/{act}/{userId}/copy
+
+``
+
+
+BODY
+
+
+
+```BASH
+{
+  "adlabels": [
+    {
+      "id": "1234567890",
+      "name": "Sample Label"
+    }
+  ],
+  "bid_strategy": "MENOR_CUSTO_SEM_CAP",
+  "budget_schedule_specs": [
+    {
+      "time_start": 1625097600,
+      "time_end": 1625184000,
+      "budget_value": 1000,
+      "budget_value_type": "DAILY"
+    }
+  ],
+  "buying_type": "AUCTION",
+  "campaign_optimization_type": "NENHUM",
+  "daily_budget": 5000,
+  "execution_options": [
+    "validate_only",
+    "include_recommendations"
+  ],
+  "is_skadnetwork_attribution": false,
+  "is_using_l3_schedule": false,
+  "iterative_split_test_configs": [],
+  "lifetime_budget": 100000,
+  "name": "Sample Campaign",
+  "objective": "INSTALACOES_DE_APLICATIVOS",
+  "promoted_object": {},
+  "source_campaign_id": 9876543210,
+  "special_ad_categories": [],
+  "special_ad_category_country": ["US"],
+  "spend_cap": 200000,
+  "start_time": "2024-07-29T00:00:00Z",
+  "status": "ACTIVE",
+  "stop_time": "2024-08-29T00:00:00Z",
+  "topline_id": 54321
+}
+
+
+
+``
