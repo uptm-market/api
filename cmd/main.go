@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"log"          // Adicionado para uso do log.Fatal
+	"net/http"     // Adicionado para uso do http.ListenAndServe
 	"os"
 
 	chiprometheus "github.com/766b/chi-prometheus"
@@ -38,7 +40,7 @@ func main() {
 
 	port := envPortOr("3333")
 	fmt.Println(":", port)
-	log.Fatal(http.ListenAndServe(port, r))
+	log.Fatal(http.ListenAndServe(port, r))  // Alterado para usar log.Fatal
 }
 
 func envPortOr(port string) string {
