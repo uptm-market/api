@@ -2,8 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
-	"net/http"
 	"os"
 
 	chiprometheus "github.com/766b/chi-prometheus"
@@ -38,9 +36,9 @@ func main() {
 	r.Mount("/user", UserRouter())
 	r.Mount("/campaign", CampaignRouter())
 
-	// port := envPortOr("8080")
-	// fmt.Println(":", port)
-	log.Fatal(http.ListenAndServe(":9999", r))
+	port := envPortOr(":3333")
+	fmt.Println(":", port)
+	// log.Fatal(http.ListenAndServe(":9999", r))
 }
 
 func envPortOr(port string) string {
