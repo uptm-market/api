@@ -52,8 +52,9 @@ func Cp(token, act string) map[string]interface{} {
 }
 
 type AdAccount struct {
-	AccountID string `json:"account_id"`
-	ID        string `json:"id"`
+	AccountID   string `json:"account_id"`
+	AccountName string `json:"account_name"`
+	ID          string `json:"id"`
 }
 
 type Cursors struct {
@@ -75,7 +76,7 @@ type Response struct {
 	ID              string          `json:"id"`
 }
 
-func CpByBusinessID(token string, businessID string) []string {
+func CpByBusinessID(token string, businessID string) *Response {
 	// token = "EAAfXJXDJoCkBO9kJHIyIS10LNKLqvtxLVZAKYMKJNZCKuLizltSpEf8Jf1glZBJfxlHyqEbAa2tPZAWIpymoRlfEDltgFaCZCxKLCij8LfBjD9XcZAUZAOzZAblnXViLgLQwdt0ysB796erMXUEdC9ABOEhUyauQvsrUtZB4vzZBNVkAhGeOQyjiZCqAzCknqo0vVtXsDpeh1PuTFrw6ZBSVYEQ1qAwqwMuyKX3ZBkksZD"
 	// businessID = "7042491049135964"
 	url := fmt.Sprintf("https://graph.facebook.com/v20.0/%s?fields=owned_ad_accounts&access_token=%s", businessID, token)
@@ -113,12 +114,8 @@ func CpByBusinessID(token string, businessID string) []string {
 		return nil
 	}
 	log.Println(response)
-	var strarray []string
-	for _, account := range response.OwnedAdAccounts.Data {
-		strarray = append(strarray, account.ID)
-	}
-	log.Println(strarray)
-	return strarray
+
+	return &response
 }
 
 func Copy(token, act string, body entity.CampaignClone) error {

@@ -180,7 +180,7 @@ sudo docker-compose up --build
 #### Get
 
 ```bash
-    /campaign?user_id={iddousuario}
+    /campaign?user_id={iddousuario}?act={passar o act aqui}
 
 ```
 - Lista todas as campanhas desse usuario(array)
@@ -326,4 +326,48 @@ BODY
 
 
 
-``
+```
+
+## Rota que retornar os acts
+
+
+```bash
+
+/campaign/{userId}/act
+```
+
+
+- Response
+
+
+```json
+
+{
+  "owned_ad_accounts": {
+    "data": [
+      {
+        "account_id": "1234567890",
+        "name": "Minha Conta de Anúncios",
+        "account_status": 1,
+        "currency": "USD",
+        "timezone_name": "America/Los_Angeles",
+        "timezone_offset_hours_utc": -7,
+        "spend_cap": 1000,
+        "amount_spent": 500
+        // Outros campos podem estar presentes aqui
+      },
+      // Outras contas de anúncios
+    ],
+    "paging": {
+      "cursors": {
+        "before": "abc123",
+        "after": "xyz789"
+      }
+    }
+  },
+  "id": "businessID"
+}
+
+
+
+```

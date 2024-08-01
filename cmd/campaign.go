@@ -14,6 +14,7 @@ import (
 func CampaignRouter() http.Handler {
 	r := chi.NewRouter()
 	r.Get("/", returnCampaignHandler)
+	r.Get("/{userId}/act", middleware.AuthMiddleware(getIndexHandlerFunc(returnActHandler)))
 	r.Post("/", middleware.AuthMiddleware(getIndexHandlerFunc(createCampaignHandler)))
 	r.Post("/{act}/{userId}/copy", middleware.AuthMiddleware(getIndexHandlerFunc(cloneCampaignHandler)))
 	r.Put("/active/{id}", middleware.AuthMiddleware(getIndexHandlerFunc(activeHandler)))
@@ -61,6 +62,8 @@ func createCampaignHandler(w http.ResponseWriter, r *http.Request) {
 func returnCampaignHandler(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	userId := r.URL.Query().Get("user_id")
+	act := r.URL.Query().Get("act")
+
 	// cpID := r.URL.Query().Get("cp_id")
 	manager := core.NewUserCampaign()
 
@@ -69,7 +72,7 @@ func returnCampaignHandler(w http.ResponseWriter, r *http.Request) {
 		rest.SendError(w, err)
 		return
 	}
-	send, err := manager.ListAds(ctx, uint(userIdInt))
+	send, err := manager.ListAds(ctx, uint(userIdInt), act)
 	if err != nil {
 		rest.SendError(w, err)
 		return
@@ -161,4 +164,16 @@ func listBusinessAll(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rest.Send(w, send)
+}
+
+func returnActHandler(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	manager := core.NewUserCampaign()
+	response, err := manager.ReturnActData(ctx, chi.URLParam(r, "userId"))
+	if err != nil {
+		rest.SendError(w, err)
+		return
+	}
+	rest.Send(w, response)
+
 }
