@@ -183,7 +183,7 @@ func (c *UserCampaign) ListAds(ctx context.Context, id uint, act string) ([]map[
 	return arrayStr, nil
 }
 
-func (c *UserCampaign) ReturnActData(ctx context.Context, userId string) ([]fb.Response, error) {
+func (c *UserCampaign) ReturnActData(ctx context.Context, userId string) ([]fb.OwnedAdAccounts, error) {
 	id, err := strconv.ParseUint(userId, 10, 16)
 	if err != nil {
 		return nil, rest.LogError(err, "strconv.ParseUint c.UserCampaign", db.ReturnTokenFacebook)
@@ -203,10 +203,10 @@ func (c *UserCampaign) ReturnActData(ctx context.Context, userId string) ([]fb.R
 		return nil, rest.LogError(err, "Erro ao criar conexao com api do facebook, problema ao consultar db ReturnActData db.ReturnTokenFacebook", db.ReturnTokenFacebook)
 	}
 	var actResponse *fb.Response
-	var actArray []fb.Response
+	var actArray []fb.OwnedAdAccounts
 	for _, a := range data.BusinessID {
 		actResponse = fb.CpByBusinessID(tk, a.ID)
-		actArray = append(actArray, *actResponse)
+		actArray = append(actArray, actResponse.OwnedAdAccounts)
 	}
 	return actArray, nil
 }
