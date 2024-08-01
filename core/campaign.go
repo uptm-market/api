@@ -174,7 +174,7 @@ func (c *UserCampaign) ListAds(ctx context.Context, id uint, act string) (map[st
 	return fbcp, nil
 }
 
-func (c *UserCampaign) ReturnActData(ctx context.Context, userId string) ([]fb.OwnedAdAccounts, error) {
+func (c *UserCampaign) ReturnActData(ctx context.Context, userId string) ([]fb.AdAccount, error) {
 	id, err := strconv.ParseUint(userId, 10, 16)
 	if err != nil {
 		return nil, rest.LogError(err, "strconv.ParseUint c.UserCampaign", db.ReturnTokenFacebook)
@@ -195,9 +195,21 @@ func (c *UserCampaign) ReturnActData(ctx context.Context, userId string) ([]fb.O
 	}
 	var actResponse *fb.Response
 	var actArray []fb.OwnedAdAccounts
+	var resp []fb.AdAccount
 	for _, a := range data.BusinessID {
 		actResponse = fb.CpByBusinessID(tk, a.ID)
-		actArray = append(actArray, actResponse.OwnedAdAccounts)
+		if len(actResponse.OwnedAdAccounts.Data) > 0 {
+			actArray = append(actArray, actResponse.OwnedAdAccounts)
+		}
 	}
-	return actArray, nil
+
+	for i, x := range actArray {
+		if len(x.Data) > 0 {
+			resp = append(resp, x.Data[i])
+		} else {
+			break
+		}
+
+	}
+	return resp, nil
 }
