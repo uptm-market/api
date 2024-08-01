@@ -53,7 +53,7 @@ func Cp(token, act string) map[string]interface{} {
 
 type AdAccount struct {
 	AccountID   string `json:"account_id"`
-	AccountName string `json:"account_name"`
+	AccountName string `json:"business_name"`
 	ID          string `json:"id"`
 }
 
