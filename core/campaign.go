@@ -3,7 +3,6 @@ package core
 import (
 	"context"
 	"database/sql"
-	"log"
 	"strconv"
 
 	v16 "github.com/justwatch/facebook-marketing-api-golang-sdk/marketing/v16"
@@ -161,7 +160,7 @@ func (c *UserCampaign) GetAllBusiness(ctx context.Context, id int) ([]entity.Bus
 	return data, nil
 }
 
-func (c *UserCampaign) ListAds(ctx context.Context, id uint, act string) ([]map[string]interface{}, error) {
+func (c *UserCampaign) ListAds(ctx context.Context, id uint, act string) (map[string]interface{}, error) {
 	tk, err := db.ReturnTokenFacebook(ctx, uint(id))
 	if err != nil {
 		if err == sql.ErrNoRows {
@@ -169,18 +168,10 @@ func (c *UserCampaign) ListAds(ctx context.Context, id uint, act string) ([]map[
 		}
 		return nil, rest.LogError(err, "Erro ao criar conexao com api do facebook, problema ao consultar db", db.ReturnTokenFacebook)
 	}
-	var dataArray []string
-	// for _, a := range data.BusinessID {
-	// 	dataArray = append(dataArray, fb.CpByBusinessID(tk, a.ID).ID)
-	// }
-	log.Println(tk)
-	log.Println(dataArray)
-	var arrayStr []map[string]interface{}
 
 	fbcp := fb.Cp(tk, act)
-	arrayStr = append(arrayStr, fbcp)
 
-	return arrayStr, nil
+	return fbcp, nil
 }
 
 func (c *UserCampaign) ReturnActData(ctx context.Context, userId string) ([]fb.OwnedAdAccounts, error) {
