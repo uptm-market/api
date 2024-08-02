@@ -193,23 +193,12 @@ func (c *UserCampaign) ReturnActData(ctx context.Context, userId string) ([]fb.A
 		}
 		return nil, rest.LogError(err, "Erro ao criar conexao com api do facebook, problema ao consultar db ReturnActData db.ReturnTokenFacebook", db.ReturnTokenFacebook)
 	}
-	var actResponse *fb.Response
-	var actArray []fb.OwnedAdAccounts
-	var resp []fb.AdAccount
-	for _, a := range data.BusinessID {
-		actResponse = fb.CpByBusinessID(tk, a.ID)
-		if len(actResponse.OwnedAdAccounts.Data) > 0 {
-			actArray = append(actArray, actResponse.OwnedAdAccounts)
-		}
+
+	var actArray []fb.AdAccount
+	for _, a := range data.BusinessID { // Loop through each business ID in the data
+		actResponse := fb.CpByBusinessID(tk, a.ID)                       // Make an API call to fetch ad accounts by business ID
+		actArray = append(actArray, actResponse.OwnedAdAccounts.Data...) // Append all ad accounts to actArray at once
 	}
 
-	for i, x := range actArray {
-		if len(x.Data) > 0 {
-			resp = append(resp, x.Data[i])
-		} else {
-			break
-		}
-
-	}
-	return resp, nil
+	return actArray, nil
 }
