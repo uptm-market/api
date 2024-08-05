@@ -15,7 +15,7 @@ import (
 func Cp(token, act string) map[string]interface{} {
 	// URL da API com a variável do token
 	// token = "EAAfXJXDJoCkBO9kJHIyIS10LNKLqvtxLVZAKYMKJNZCKuLizltSpEf8Jf1glZBJfxlHyqEbAa2tPZAWIpymoRlfEDltgFaCZCxKLCij8LfBjD9XcZAUZAOzZAblnXViLgLQwdt0ysB796erMXUEdC9ABOEhUyauQvsrUtZB4vzZBNVkAhGeOQyjiZCqAzCknqo0vVtXsDpeh1PuTFrw6ZBSVYEQ1qAwqwMuyKX3ZBkksZD"
-	url := fmt.Sprintf("https://graph.facebook.com/v20.0/%s/campaigns?fields=daily_budget,buying_type,effective_status,is_budget_schedule_enabled,issues_info,lifetime_budget,budget_remaining,budget_rebalance_flag,source_campaign,insights,objective,pacing_type,smart_promotion_type,last_budget_toggling_time,status,special_ad_category,bid_strategy,adsets{billing_event,budget_remaining,daily_budget,lifetime_budget}&access_token=%s", act, token)
+	url := fmt.Sprintf("https://graph.facebook.com/v20.0/%s/campaigns?fields=daily_budget,buying_type,effective_status,is_budget_schedule_enabled,issues_info,lifetime_budget,budget_remaining,budget_rebalance_flag,source_campaign,objective,pacing_type,smart_promotion_type,last_budget_toggling_time,status,special_ad_category,bid_strategy,adsets{billing_event,budget_remaining,daily_budget,lifetime_budget},insights{account_currency,buying_type,conversions,conversion_values,cost_per_unique_click,cpc,cpm,date_start,frequency,reach,website_ctr}&access_token=%s", act, token)
 
 	// Função para fazer a solicitação e ler a resposta
 
