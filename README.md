@@ -187,29 +187,222 @@ sudo docker-compose up --build
 #### Response
 
 ```JSON
-[{
-  "account_id": "123456789",
-  "buying_type": "AUCTION",
-  "campaign_group_id": "987654321",
-  "bid_strategy": "LOWEST_COST_WITHOUT_CAP",
-  "bid_amount": 5000,
-  "can_use_spend_cap": true,
-  "configured_status": "PAUSED",
-  "created_time": "2023-05-20T14:30:00Z",
-  "daily_budget": "100000",
-  "effective_status": "ACTIVE",
-  "id": "1122334455",
-  "lifetime_budget": "5000000",
-  "name": "My Campaign",
-  "objective": "CONVERSIONS",
-  "spend_cap": "10000000",
-  "start_time": "2023-05-25T00:00:00Z",
-  "status": "ACTIVE",
-  "stop_time": "2023-06-25T00:00:00Z",
-  "updated_time": "2023-05-28T14:30:00Z",
-  "special_ad_categories": ["NONE"]
+{
+  "data": [
+    {
+      "buying_type": "AUCTION",
+      "effective_status": "ACTIVE",
+      "is_budget_schedule_enabled": false,
+      "budget_remaining": "0",
+      "budget_rebalance_flag": false,
+      "objective": "OUTCOME_SALES",
+      "smart_promotion_type": "GUIDED_CREATION",
+      "status": "ACTIVE",
+      "special_ad_category": "NONE",
+      "adsets": {
+        "data": [
+          {
+            "billing_event": "IMPRESSIONS",
+            "budget_remaining": "25000",
+            "daily_budget": "25000",
+            "lifetime_budget": "0",
+            "id": "120211909128310758"
+          },
+          {
+            "billing_event": "IMPRESSIONS",
+            "budget_remaining": "5000",
+            "daily_budget": "5000",
+            "lifetime_budget": "0",
+            "id": "120211909128300758"
+          },
+          {
+            "billing_event": "IMPRESSIONS",
+            "budget_remaining": "5000",
+            "daily_budget": "5000",
+            "lifetime_budget": "0",
+            "id": "120211909128280758"
+          },
+          {
+            "billing_event": "IMPRESSIONS",
+            "budget_remaining": "5000",
+            "daily_budget": "5000",
+            "lifetime_budget": "0",
+            "id": "120211909128260758"
+          },
+          {
+            "billing_event": "IMPRESSIONS",
+            "budget_remaining": "5000",
+            "daily_budget": "5000",
+            "lifetime_budget": "0",
+            "id": "120211909100300758"
+          }
+        ],
+        "paging": {
+          "cursors": {
+            "before": "QVFIUlJlYVJZAN19LcGpabnhoZAnU5ZAVBOaGZAIbXBHbjF4UWszMjNLSWptR2dRTzFLOUQ3bzVHM1pkblVLLXdSb0tCNUZAMZAzN3NllWRXFVZAHlDNVdoRjJINGlR",
+            "after": "QVFIUmtuaEhhZAG1GX2xqNktSSDRpYnhoMko2ekt3NERTVncwSmlwUXpqWkRCci10MHMzendlTE9NR1hNS3RkZAjZAJOTBKNDk1VkNwRm5HVnRPN19MQ3hLZAmlB"
+          }
+        }
+      },
+      "insights": {
+        "data": [
+          {
+            "account_currency": "BRL",
+            "buying_type": "AUCTION",
+            "cost_per_unique_click": "1.042935",
+            "cpc": "0.841605",
+            "cpm": "50.571217",
+            "date_start": "2024-07-08",
+            "frequency": "1.288831",
+            "reach": "11505",
+            "website_ctr": [
+              {
+                "action_type": "link_click",
+                "value": "5.138926"
+              }
+            ],
+            "date_stop": "2024-08-06"
+          }
+        ],
+        "paging": {
+          "cursors": {
+            "before": "MAZDZD",
+            "after": "MAZDZD"
+          }
+        }
+      },
+      "id": "120211909100120758"
+    },
+    {
+      "buying_type": "AUCTION",
+      "effective_status": "PAUSED",
+      "is_budget_schedule_enabled": false,
+      "budget_remaining": "0",
+      "budget_rebalance_flag": false,
+      "objective": "OUTCOME_ENGAGEMENT",
+      "smart_promotion_type": "GUIDED_CREATION",
+      "status": "PAUSED",
+      "special_ad_category": "NONE",
+      "adsets": {
+        "data": [
+          {
+            "billing_event": "IMPRESSIONS",
+            "budget_remaining": "5000",
+            "daily_budget": "5000",
+            "lifetime_budget": "0",
+            "id": "120211688935480758"
+          },
+          {
+            "billing_event": "IMPRESSIONS",
+            "budget_remaining": "5000",
+            "daily_budget": "5000",
+            "lifetime_budget": "0",
+            "id": "120211688385190758"
+          }
+        ],
+        "paging": {
+          "cursors": {
+            "before": "QVFIUk1rQTVDNzFuakZAndXZACSVU5OFFUZA09YbW5Jb0lhUG42NjFScG9WTW9zM0NNcGRTTUFaR1kyanJydm16TFJKOE45c1hXWTRpTkJmb0RXQjZAZAamZAMV2Fn",
+            "after": "QVFIUnhQR3dkeDdibGItT0E4TGM0MXVqNmJZAdHVxYzcta0FYOERCcmdEQzItNHUtcE90SnZAVRGNOd05PYnhoOWlVdmJuLWJfNUtwdU5oblBoUU5pTUJsbk13"
+          }
+        }
+      },
+      "insights": {
+        "data": [
+          {
+            "account_currency": "BRL",
+            "buying_type": "AUCTION",
+            "cost_per_unique_click": "1.215",
+            "cpc": "1.07797",
+            "cpm": "31.895439",
+            "date_start": "2024-07-08",
+            "frequency": "1.20996",
+            "reach": "3715",
+            "website_ctr": [
+              {
+                "action_type": "link_click",
+                "value": "1.89099"
+              }
+            ],
+            "date_stop": "2024-08-06"
+          }
+        ],
+        "paging": {
+          "cursors": {
+            "before": "MAZDZD",
+            "after": "MAZDZD"
+          }
+        }
+      },
+      "id": "120211688385150758"
+    },
+    {
+      "daily_budget": "30000",
+      "buying_type": "AUCTION",
+      "effective_status": "PAUSED",
+      "is_budget_schedule_enabled": false,
+      "budget_remaining": "30000",
+      "budget_rebalance_flag": false,
+      "objective": "OUTCOME_SALES",
+      "pacing_type": [
+        "standard"
+      ],
+      "smart_promotion_type": "GUIDED_CREATION",
+      "status": "PAUSED",
+      "special_ad_category": "NONE",
+      "bid_strategy": "LOWEST_COST_WITHOUT_CAP",
+      "adsets": {
+        "data": [
+          {
+            "billing_event": "IMPRESSIONS",
+            "budget_remaining": "0",
+            "id": "120211310840660758"
+          }
+        ],
+        "paging": {
+          "cursors": {
+            "before": "QVFIUjdTbEIyUDY1bXF0eEVULXNKRkc0Wkszc2JTVlFEbWlBaFVhbEdtWFdiSncxMDA1dkpLbE90d0FnQXBuajlqT21wSU5waE1zMjcyUWlWT0ZAuNnlBSGNR",
+            "after": "QVFIUjdTbEIyUDY1bXF0eEVULXNKRkc0Wkszc2JTVlFEbWlBaFVhbEdtWFdiSncxMDA1dkpLbE90d0FnQXBuajlqT21wSU5waE1zMjcyUWlWT0ZAuNnlBSGNR"
+          }
+        }
+      },
+      "insights": {
+        "data": [
+          {
+            "account_currency": "BRL",
+            "buying_type": "AUCTION",
+            "cost_per_unique_click": "1.218816",
+            "cpc": "1.029222",
+            "cpm": "30.993754",
+            "date_start": "2024-07-08",
+            "frequency": "1.088635",
+            "reach": "8236",
+            "website_ctr": [
+              {
+                "action_type": "link_click",
+                "value": "2.409101"
+              }
+            ],
+            "date_stop": "2024-08-06"
+          }
+        ],
+        "paging": {
+          "cursors": {
+            "before": "MAZDZD",
+            "after": "MAZDZD"
+          }
+        }
+      },
+      "id": "120211310840550758"
+    }
+  ],
+  "paging": {
+    "cursors": {
+      "before": "QVFIUjJ1UGFQMXItUGUzZAVk0dGtNSEJqR1VnRGg2bGMzUkpEVVQwZAmlrNFNDcjZABOXF5VjBsMTFqRlVwTzBrV2tOZAkhSX05OdE1LNWxiYjd0cGd0VEc4VTJ3",
+      "after": "QVFIUjZAMZAkUtcGNJZAWx1U25VUmF2LWgtRHRwVDZAYckRLaTg1UWpsTVRlOExENUF2NWNRdDl6WWJYVUFjRnpxMVRRaEs3bXI2amxIcVZAnWEpyT3k1THZA5bmxB"
+    }
+  }
 }
-]
 
 ```
 
